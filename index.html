@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EarnLink — Follow • Like • Earn</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="brand-icon">⚡</span> Earn<span>Link</span></div>
+    <nav>
+      <a class="active" href="#home">Home</a>
+      <a href="#tasks">Tasks</a>
+      <a href="#wallet">Wallet</a>
+      <a href="#history">History</a>
+    </nav>
+    <button class="profile-btn">T</button>
+  </header>
+
+  <main class="layout" id="home">
+    <aside class="sidebar">
+      <a class="nav active" href="#home">⌂ <span>Home</span></a>
+      <a class="nav" href="#tasks">☷ <span>Tasks</span></a>
+      <a class="nav" href="#wallet">▣ <span>My Earnings</span></a>
+      <a class="nav" href="#wallet">↗ <span>Withdraw</span></a>
+      <a class="nav" href="#profile">♙ <span>Profile</span></a>
+      <a class="nav" href="#support">? <span>Support</span></a>
+
+      <div class="referral">
+        <div class="ref-icon">♛</div>
+        <h3>Invite Friends</h3>
+        <p>Earn more by inviting friends with your referral link.</p>
+        <button>Get Referral Link</button>
+      </div>
+    </aside>
+
+    <section class="content">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">10 CHANNELS • 10 TASKS</p>
+          <h1>Turn Your Time Into <strong>Real Rewards!</strong></h1>
+          <p>Complete eligible tasks, submit proof, and build your reward balance.</p>
+          <a class="primary" href="#tasks">Start Earning →</a>
+        </div>
+        <div class="hero-badge">10<br><small>Tasks</small></div>
+      </section>
+
+      <section class="tasks-section" id="tasks">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">AVAILABLE TASKS</p>
+            <h2>10 Channels</h2>
+          </div>
+          <strong>Complete all 10 to earn up to <span id="possible-total">KSh 85</span></strong>
+        </div>
+        <div class="task-grid" id="task-grid"></div>
+      </section>
+    </section>
+
+    <aside class="rightbar">
+      <div class="welcome-card">
+        <p>Welcome back 👋</p>
+        <h2>Tracy</h2>
+        <div class="balance">
+          <span>Your Balance</span>
+          <strong id="balance">KSh 0.00</strong>
+          <button onclick="openWallet()">Withdraw</button>
+        </div>
+        <div class="stats">
+          <div><span>Tasks Completed</span><b id="completed">0 / 10</b></div>
+          <div><span>Total Earned</span><b id="earned">KSh 0.00</b></div>
+          <div><span>Pending</span><b id="pending">KSh 0.00</b></div>
+        </div>
+      </div>
+
+      <div class="progress-card">
+        <h3>Task Progress</h3>
+        <div class="progress"><i id="progress-bar"></i></div>
+        <p id="progress-text">Complete your tasks to increase your balance.</p>
+      </div>
+    </aside>
+  </main>
+
+  <div class="modal hidden" id="task-modal">
+    <div class="modal-card">
+      <button class="close" onclick="closeModal()">×</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
