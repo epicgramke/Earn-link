@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EarnLink | Dashboard</title><link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar"><a class="brand" href="index.html">EARN<span>LINK</span></a><nav>
+<a class="active" href="index.html">Home</a><a href="tasks.html">Tasks</a><a href="verification.html">Verification</a><a href="wallet.html">Wallet</a>
+</nav><button class="logout" onclick="logout()">Logout</button></header>
+<main class="container">
+<section class="hero"><div><p class="eyebrow">WELCOME BACK</p><h1>Earn more. <span>Do more.</span></h1><p>Complete verified tasks and build your earnings.</p></div><a class="btn" href="tasks.html">View Tasks →</a></section>
+<section class="balance-grid">
+<div class="balance-card"><small>AVAILABLE BALANCE</small><strong>KSh <span id="available">0.00</span></strong><a href="wallet.html">Withdraw →</a></div>
+<div class="stat"><small>PENDING</small><strong>KSh <span id="pending">0.00</span></strong></div>
+<div class="stat"><small>TOTAL EARNED</small><strong>KSh <span id="total">0.00</span></strong></div>
+<div class="stat"><small>COMPLETED TASKS</small><strong id="completed">0</strong></div>
+</section>
+<section class="dashboard-grid">
+<div class="panel"><h2>How EarnLink works</h2><div class="steps"><div><b>01</b><span>Choose a task</span></div><div><b>02</b><span>Complete it with the required proof</span></div><div><b>03</b><span>Submit for verification</span></div><div><b>04</b><span>Get approved earnings</span></div></div></div>
+<div class="panel quick"><h2>Quick actions</h2><a href="tasks.html">🎯 Browse available tasks</a><a href="verification.html">✓ Check verification</a><a href="wallet.html">💰 Open wallet</a></div>
+</section>
+</main><script src="script.js"></script>
+</body></html>
