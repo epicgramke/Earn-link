@@ -188,10 +188,18 @@ function updateTimer() {
     if (timer) {
       timer.textContent = "Completed";
     }
+if (taskMsg) {
+  taskMsg.textContent =
+    "Your submission has been recorded and is pending review.";
+}
 
-    if (taskMsg) {
-      taskMsg.textContent =
-        "Review period completed. You can now submit your proof.";
+submitButton.disabled = true;
+clearInterval(timerInterval);
+
+// Redirect to wallet after submission
+setTimeout(() => {
+  window.location.href = "wallet.html";
+}, 1000);
     }
 
     if (submitButton) {
