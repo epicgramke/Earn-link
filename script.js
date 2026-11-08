@@ -1,9 +1,14 @@
 
-const taskNote = `CLICK NEXT AND COMPLETE THE 20-MINUTE YOUTUBE CONTENT REVIEW!
+// =====================================
+// EARNLINK - MAIN SCRIPT
+// =====================================
+
+const taskNote = `CLICK NEXT AND COMPLETE THE 30-SECOND YOUTUBE CONTENT REVIEW!
 
 PLEASE SCREEN RECORD YOUR SCREEN TO SHOW YOUR COMPLETION.
 ONCE DONE, SUBMIT YOUR PROOF FOR REVIEW.
-`;
+
+Thank you for participating! We hope you enjoy the task. ❤️`;
 
 const channels = [
   "https://www.youtube.com/@kenyanationaltv",
@@ -27,22 +32,24 @@ const tasks = channels.map((url, index) => ({
   instructions: taskNote
 }));
 
-// -----------------------------
-// GENERAL FUNCTIONS
-// -----------------------------
+// =====================================
+// LOGOUT
+// =====================================
 
 function logout() {
   localStorage.removeItem("earnlinkUser");
   window.location.href = "login.html";
 }
 
-function initAuth() {
-  const user = localStorage.getItem("earnlinkUser");
+// =====================================
+// LOGIN AND REGISTRATION
+// =====================================
 
+function initAuth() {
   const loginForm = document.getElementById("loginForm");
 
   if (loginForm) {
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener("submit", function(event) {
       event.preventDefault();
 
       const email = document.getElementById("email")?.value.trim();
@@ -65,7 +72,7 @@ function initAuth() {
   const registerForm = document.getElementById("registerForm");
 
   if (registerForm) {
-    registerForm.addEventListener("submit", function (event) {
+    registerForm.addEventListener("submit", function(event) {
       event.preventDefault();
 
       const email = document.getElementById("email")?.value.trim();
@@ -86,9 +93,9 @@ function initAuth() {
   }
 }
 
-// -----------------------------
-// TASK LIST
-// -----------------------------
+// =====================================
+// DISPLAY TASKS
+// =====================================
 
 function renderTasks() {
   const taskContainer = document.getElementById("taskList");
@@ -106,9 +113,9 @@ function renderTasks() {
       <h3>${task.name}</h3>
       <p>${task.platform} Content Review</p>
       <p class="task-reward">Reward: KSh ${task.reward}</p>
-      <p>Duration: 20 minutes</p>
+      <p>Duration: 30 seconds</p>
       <a class="btn" href="task.html?id=${task.id}">
-        Start Task
+        NEXT →
       </a>
     `;
 
@@ -116,9 +123,9 @@ function renderTasks() {
   });
 }
 
-// -----------------------------
-// TASK DETAILS AND TIMER
-// -----------------------------
+// =====================================
+// INDIVIDUAL TASK PAGE
+// =====================================
 
 function initTask() {
   const taskName = document.getElementById("taskName");
@@ -131,7 +138,7 @@ function initTask() {
   const task = tasks.find(item => item.id === taskId);
 
   if (!task) {
-    taskName.textContent = "Task not found";
+    taskName.textContent = "TASK NOT FOUND";
     return;
   }
 
@@ -157,14 +164,17 @@ function initTask() {
     target.href = task.url;
     target.target = "_blank";
     target.rel = "noopener noreferrer";
+    target.textContent = "NEXT →";
   }
 
-  // -----------------------------
-  // 20-MINUTE TIMER
-  // -----------------------------
+  // =====================================
+  // 30-SECOND TIMER
+  // =====================================
 
-  const duration = 20 * 60 * 1000;
-  const timerKey = `earnlink_timer_${task.id}`;
+  const duration = 30 * 1000;
+
+  // New key resets the previous timer
+  const timerKey = `earnlink_timer_v3_${task.id}`;
 
   let startTime = sessionStorage.getItem(timerKey);
 
@@ -175,26 +185,32 @@ function initTask() {
     startTime = Number(startTime);
   }
 
+  if (timer) {
+    timer.style.color = "red";
+    timer.style.borderColor = "red";
+  }
+
+  if (submitButton) {
+    submitButton.disabled = true;
+  }
+
   let timerInterval;
 
   function updateTimer() {
     const elapsed = Date.now() - startTime;
     const remaining = Math.max(0, duration - elapsed);
 
-    const minutes = Math.floor(remaining / 60000);
-    const seconds = Math.floor((remaining % 60000) / 1000);
+    const seconds = Math.ceil(remaining / 1000);
 
     if (timer) {
-      timer.textContent =
-        `${String(minutes).padStart(2, "0")}:` +
-        `${String(seconds).padStart(2, "0")}`;
+      timer.textContent = `00:${String(seconds).padStart(2, "0")}`;
     }
 
     if (remaining <= 0) {
       clearInterval(timerInterval);
 
       if (timer) {
-        timer.textContent = "20:00 completed";
+        timer.textContent = "00:00";
       }
 
       if (taskMsg) {
@@ -208,20 +224,15 @@ function initTask() {
     }
   }
 
-  if (submitButton) {
-    submitButton.disabled = true;
-  }
-
   updateTimer();
+  timerInterval = setInterval(updateTimer, 250);
 
-  timerInterval = setInterval(updateTimer, 1000);
-
-  // -----------------------------
+  // =====================================
   // PROOF FILE SELECTION
-  // -----------------------------
+  // =====================================
 
   if (proof) {
-    proof.addEventListener("change", function () {
+    proof.addEventListener("change", function() {
       if (taskMsg) {
         taskMsg.textContent = proof.files.length
           ? `Selected: ${proof.files[0].name}`
@@ -230,26 +241,25 @@ function initTask() {
     });
   }
 
-  // -----------------------------
+  // =====================================
   // SUBMIT TASK
-  // -----------------------------
+  // =====================================
 
   if (submitButton) {
-    submitButton.addEventListener("click", function () {
+    submitButton.addEventListener("click", function() {
       const elapsed = Date.now() - startTime;
 
       if (elapsed < duration) {
         if (taskMsg) {
           taskMsg.textContent =
-            "Please complete the 20-minute review period first.";
+            "Please complete the review period first.";
         }
         return;
       }
 
       if (!proof || !proof.files || proof.files.length === 0) {
         if (taskMsg) {
-          taskMsg.textContent =
-            "Please select your screen recording proof.";
+          taskMsg.textContent = "Please select your proof file.";
         }
         return;
       }
@@ -288,11 +298,11 @@ function initTask() {
   }
 }
 
-// -----------------------------
+// =====================================
 // INITIALIZE WEBSITE
-// -----------------------------
+// =====================================
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   initAuth();
   renderTasks();
   initTask();
