@@ -3,6 +3,11 @@
    YouTube Content Review Task System
    ========================================================= */
 
+
+/* =========================================================
+   TASK DATA
+========================================================= */
+
 const channels = [
   "https://www.youtube.com/@kenyanationaltv",
   "https://www.youtube.com/@EPICGRAMke002",
@@ -16,81 +21,117 @@ const channels = [
   "https://www.youtube.com/@TRACIEVLOGS"
 ];
 
+
+const tasks = channels.map(function(url, index) {
+
+  return {
+    id: index + 1,
+
+    name: `YOUTUBE ${index + 1}`,
+
+    platform: "YouTube",
+
+    reward: 10,
+
+    url: url,
+
+    instructions:
+      "OPEN THE YOUTUBE CONTENT BELOW.\n" +
+      "REVIEW THE ASSIGNED CONTENT.\n" +
+      "FOLLOW THE TASK INSTRUCTIONS.\n" +
+      "RECORD YOUR SCREEN WHILE COMPLETING THE REVIEW.\n" +
+      "UPLOAD YOUR RECORDING AS PROOF FOR REVIEW."
+  };
+
+});
+
+
 /* =========================================================
-   TASKS
-   ========================================================= */
-
-const tasks = channels.map((url, index) => ({
-  id: index + 1,
-  name: `YOUTUBE ${index + 1}`,
-  platform: "YouTube",
-  reward: 10,
-  url: url,
-
-  instructions:
-    "OPEN THE YOUTUBE CHANNEL BELOW.\n" +
-    "REVIEW THE ASSIGNED CONTENT.\n" +
-    "RECORD YOUR SCREEN WHILE COMPLETING THE REVIEW.\n" +
-    "UPLOAD YOUR RECORDING AS PROOF FOR REVIEW."
-}));
-
-/* =========================================================
-   STORAGE
-   ========================================================= */
+   LOCAL STORAGE
+========================================================= */
 
 function getUser() {
+
   try {
+
     return JSON.parse(
       localStorage.getItem("earnlinkUser") || "null"
     );
+
   } catch (error) {
+
     return null;
+
   }
+
 }
 
+
 function saveUser(user) {
+
   localStorage.setItem(
     "earnlinkUser",
     JSON.stringify(user)
   );
+
 }
 
+
 function getSubmissions() {
+
   try {
+
     return JSON.parse(
       localStorage.getItem("earnlinkSubmissions") || "[]"
     );
+
   } catch (error) {
+
     return [];
+
   }
+
 }
 
+
 function saveSubmissions(submissions) {
+
   localStorage.setItem(
     "earnlinkSubmissions",
     JSON.stringify(submissions)
   );
+
 }
+
 
 /* =========================================================
-   AUTHENTICATION
-   ========================================================= */
-
-function logout() {
-  localStorage.removeItem("earnlinkUser");
-  window.location.href = "login.html";
-}
+   AUTH
+========================================================= */
 
 function isLoggedIn() {
+
   return !!getUser();
+
 }
 
+
+function logout() {
+
+  localStorage.removeItem("earnlinkUser");
+
+  window.location.href = "login.html";
+
+}
+
+
 function protectPage() {
+
   const page =
     window.location.pathname
       .split("/")
       .pop()
       .toLowerCase();
+
 
   const publicPages = [
     "",
@@ -98,20 +139,49 @@ function protectPage() {
     "signup.html"
   ];
 
+
   if (
     !publicPages.includes(page) &&
     !isLoggedIn()
   ) {
+
     window.location.href = "login.html";
+
+    return false;
+
   }
+
+
+  return true;
+
 }
+
+
+/* =========================================================
+   PHONE VALIDATION
+========================================================= */
+
+function validPhone(phone) {
+
+  const clean = phone.replace(/\s+/g, "");
+
+  return (
+    /^(07|01)[0-9]{8}$/.test(clean) ||
+    /^254(7|1)[0-9]{8}$/.test(clean)
+  );
+
+}
+
+
+/* =========================================================
+   LOGIN / SIGNUP
+========================================================= */
 
 function initAuth() {
 
-  /* LOGIN */
-
   const loginForm =
     document.getElementById("loginForm");
+
 
   if (loginForm) {
 
@@ -121,46 +191,76 @@ function initAuth() {
 
         event.preventDefault();
 
+
         const phone =
           document
             .getElementById("phone")
             ?.value
             .trim();
 
+
         const password =
           document
             .getElementById("password")
             ?.value;
 
+
         const message =
           document.getElementById("msg");
+
 
         if (!phone || !password) {
 
           if (message) {
+
             message.textContent =
               "Please enter your phone number and password.";
+
           }
 
           return;
+
         }
+
+
+        if (!validPhone(phone)) {
+
+          if (message) {
+
+            message.textContent =
+              "Enter a valid Kenyan phone number.";
+
+          }
+
+          return;
+
+        }
+
+
+        /*
+          Demo authentication.
+
+          For a real production system, authentication
+          should be handled by a secure backend.
+        */
 
         saveUser({
           phone: phone
         });
 
+
         window.location.href =
           "index.html";
+
       }
     );
+
   }
 
-  /* SIGN UP */
 
   const registerForm =
-    document.getElementById(
-      "registerForm"
-    );
+    document.getElementById("registerForm");
+
 
   if (registerForm) {
 
@@ -170,70 +270,139 @@ function initAuth() {
 
         event.preventDefault();
 
+
         const phone =
           document
             .getElementById("phone")
             ?.value
             .trim();
 
+
         const password =
           document
             .getElementById("password")
             ?.value;
 
+
+        const confirmPassword =
+          document
+            .getElementById("confirmPassword")
+            ?.value;
+
+
         const message =
           document.getElementById("msg");
 
-        if (!phone || !password) {
+
+        if (!phone || !password || !confirmPassword) {
 
           if (message) {
+
             message.textContent =
-              "Please fill in all required fields.";
+              "Please fill in all fields.";
+
           }
 
           return;
+
         }
+
+
+        if (!validPhone(phone)) {
+
+          if (message) {
+
+            message.textContent =
+              "Enter a valid Kenyan phone number.";
+
+          }
+
+          return;
+
+        }
+
+
+        if (password.length < 6) {
+
+          if (message) {
+
+            message.textContent =
+              "Password must contain at least 6 characters.";
+
+          }
+
+          return;
+
+        }
+
+
+        if (password !== confirmPassword) {
+
+          if (message) {
+
+            message.textContent =
+              "Passwords do not match.";
+
+          }
+
+          return;
+
+        }
+
 
         saveUser({
           phone: phone
         });
 
+
         window.location.href =
           "index.html";
+
       }
     );
+
   }
+
 }
+
 
 /* =========================================================
    TASK LIST
-   ========================================================= */
+========================================================= */
 
 function renderTasks() {
 
   const taskList =
-    document.getElementById(
-      "taskList"
-    );
+    document.getElementById("taskList");
+
 
   if (!taskList) {
+
     return;
+
   }
 
+
   taskList.innerHTML = "";
+
 
   tasks.forEach(function(task) {
 
     const card =
-      document.createElement("div");
+      document.createElement("article");
+
 
     card.className =
       "task-card";
 
-    card.innerHTML = `
-      <h3>${task.name}</h3>
 
-      <p>
+    card.innerHTML = `
+
+      <h3>
+        ${task.name}
+      </h3>
+
+      <p class="task-platform">
         ${task.platform} Content Review
       </p>
 
@@ -241,7 +410,7 @@ function renderTasks() {
         Reward: KSh ${task.reward}
       </p>
 
-      <p>
+      <p class="task-duration">
         Review duration: 10 seconds
       </p>
 
@@ -251,97 +420,109 @@ function renderTasks() {
       >
         Start Task
       </a>
+
     `;
 
+
     taskList.appendChild(card);
+
   });
+
 }
 
+
 /* =========================================================
-   TASK DETAILS
-   ========================================================= */
+   TASK DETAIL
+========================================================= */
 
 function initTask() {
 
   const taskName =
-    document.getElementById(
-      "taskName"
-    );
+    document.getElementById("taskName");
+
 
   if (!taskName) {
+
     return;
+
   }
+
 
   const params =
     new URLSearchParams(
       window.location.search
     );
 
+
   const taskId =
-    Number(
-      params.get("id")
-    );
+    Number(params.get("id"));
+
 
   const task =
     tasks.find(function(item) {
+
       return item.id === taskId;
+
     });
+
 
   if (!task) {
 
     taskName.textContent =
-      "Task not found";
+      "Task not found.";
 
     return;
+
   }
 
+
   const reward =
-    document.getElementById(
-      "reward"
-    );
+    document.getElementById("reward");
+
 
   const instructions =
-    document.getElementById(
-      "instructions"
-    );
+    document.getElementById("instructions");
+
 
   const target =
-    document.getElementById(
-      "target"
-    );
+    document.getElementById("target");
+
 
   const timer =
-    document.getElementById(
-      "timer"
-    );
+    document.getElementById("timer");
+
 
   const proof =
-    document.getElementById(
-      "proof"
-    );
+    document.getElementById("proof");
+
 
   const submitButton =
-    document.getElementById(
-      "submitTask"
-    );
+    document.getElementById("submitTask");
+
 
   const taskMsg =
-    document.getElementById(
-      "taskMsg"
-    );
+    document.getElementById("taskMsg");
+
 
   taskName.textContent =
     task.name;
 
+
   if (reward) {
+
     reward.textContent =
       `KSh ${task.reward}`;
+
   }
 
+
   if (instructions) {
+
     instructions.textContent =
       task.instructions;
+
   }
+
 
   if (target) {
 
@@ -353,22 +534,25 @@ function initTask() {
 
     target.rel =
       "noopener noreferrer";
+
   }
 
-  /* ---------------------------------------------------------
-     TIMER
-     --------------------------------------------------------- */
+
+  /* -------------------------------------------------------
+     10 SECOND REVIEW TIMER
+  ------------------------------------------------------- */
 
   const duration =
     10000;
 
+
   const timerKey =
     `earnlink_timer_${task.id}`;
 
+
   let startTime =
-    sessionStorage.getItem(
-      timerKey
-    );
+    sessionStorage.getItem(timerKey);
+
 
   if (!startTime) {
 
@@ -384,15 +568,19 @@ function initTask() {
 
     startTime =
       Number(startTime);
+
   }
 
-  let timerInterval = null;
+
+  let timerInterval =
+    null;
+
 
   function updateTimer() {
 
     const elapsed =
-      Date.now() -
-      startTime;
+      Date.now() - startTime;
+
 
     const remaining =
       Math.max(
@@ -400,49 +588,56 @@ function initTask() {
         duration - elapsed
       );
 
+
     if (timer) {
 
-      if (remaining > 0) {
+      timer.textContent =
+        remaining > 0
+          ? `${Math.ceil(remaining / 1000)}s`
+          : "Completed";
 
-        timer.textContent =
-          `${Math.ceil(
-            remaining / 1000
-          )}s`;
-
-      } else {
-
-        timer.textContent =
-          "Completed";
-      }
     }
+
 
     if (remaining <= 0) {
 
       if (timerInterval) {
-        clearInterval(
-          timerInterval
-        );
+
+        clearInterval(timerInterval);
+
       }
+
 
       if (taskMsg) {
 
         taskMsg.textContent =
           "Review completed. Upload your proof to submit.";
+
       }
+
 
       if (submitButton) {
+
         submitButton.disabled =
           false;
+
       }
+
     }
+
   }
+
 
   if (submitButton) {
+
     submitButton.disabled =
       true;
+
   }
 
+
   updateTimer();
+
 
   timerInterval =
     setInterval(
@@ -450,9 +645,10 @@ function initTask() {
       100
     );
 
-  /* ---------------------------------------------------------
+
+  /* -------------------------------------------------------
      PROOF FILE
-     --------------------------------------------------------- */
+  ------------------------------------------------------- */
 
   if (proof) {
 
@@ -463,61 +659,75 @@ function initTask() {
         if (!proof.files.length) {
 
           if (taskMsg) {
+
             taskMsg.textContent =
               "No proof selected.";
+
           }
 
           return;
+
         }
+
 
         const file =
           proof.files[0];
 
+
         const maxSize =
           100 * 1024 * 1024;
 
+
         if (file.size > maxSize) {
 
-          proof.value =
-            "";
+          proof.value = "";
+
 
           if (taskMsg) {
+
             taskMsg.textContent =
               "The recording must be smaller than 100 MB.";
+
           }
 
           return;
+
         }
 
-        if (
-          !file.type.startsWith(
-            "video/"
-          )
-        ) {
 
-          proof.value =
-            "";
+        if (!file.type.startsWith("video/")) {
+
+          proof.value = "";
+
 
           if (taskMsg) {
+
             taskMsg.textContent =
               "Please select a video recording.";
+
           }
 
           return;
+
         }
+
 
         if (taskMsg) {
 
           taskMsg.textContent =
             `Selected: ${file.name}`;
+
         }
+
       }
     );
+
   }
 
-  /* ---------------------------------------------------------
+
+  /* -------------------------------------------------------
      SUBMIT TASK
-     --------------------------------------------------------- */
+  ------------------------------------------------------- */
 
   if (submitButton) {
 
@@ -526,18 +736,22 @@ function initTask() {
       function() {
 
         const elapsed =
-          Date.now() -
-          startTime;
+          Date.now() - startTime;
+
 
         if (elapsed < duration) {
 
           if (taskMsg) {
+
             taskMsg.textContent =
               "Please complete the review timer first.";
+
           }
 
           return;
+
         }
+
 
         if (
           !proof ||
@@ -546,15 +760,20 @@ function initTask() {
         ) {
 
           if (taskMsg) {
+
             taskMsg.textContent =
               "Please select your screen recording proof.";
+
           }
 
           return;
+
         }
+
 
         const user =
           getUser();
+
 
         if (!user) {
 
@@ -562,100 +781,106 @@ function initTask() {
             "login.html";
 
           return;
+
         }
+
 
         const file =
           proof.files[0];
 
+
         const submissions =
           getSubmissions();
 
-        /* Prevent duplicate pending submission */
 
         const duplicate =
-          submissions.some(
-            function(item) {
+          submissions.some(function(item) {
 
-              return (
-                item.taskId === task.id &&
-                item.userPhone === user.phone &&
-                item.status ===
-                  "Pending review"
-              );
-            }
-          );
+            return (
+              item.taskId === task.id &&
+              item.userPhone === user.phone &&
+              item.status === "Pending review"
+            );
+
+          });
+
 
         if (duplicate) {
 
           if (taskMsg) {
+
             taskMsg.textContent =
               "You already have a pending submission for this task.";
+
           }
 
           return;
+
         }
+
 
         const submission = {
 
-          id:
-            Date.now(),
+          id: Date.now(),
 
-          taskId:
-            task.id,
+          taskId: task.id,
 
-          taskName:
-            task.name,
+          taskName: task.name,
 
-          platform:
-            task.platform,
+          platform: task.platform,
 
-          reward:
-            task.reward,
+          reward: task.reward,
 
-          userPhone:
-            user.phone,
+          userPhone: user.phone,
 
-          proofFileName:
-            file.name,
+          proofFileName: file.name,
 
-          proofFileSize:
-            file.size,
+          proofFileSize: file.size,
 
           submittedAt:
             new Date().toISOString(),
 
           status:
             "Pending review"
+
         };
+
 
         submissions.push(
           submission
         );
 
+
         saveSubmissions(
           submissions
         );
+
 
         sessionStorage.removeItem(
           timerKey
         );
 
-        if (submitButton) {
-          submitButton.disabled =
-            true;
-        }
+
+        submitButton.disabled =
+          true;
+
 
         if (timerInterval) {
+
           clearInterval(
             timerInterval
           );
+
         }
+
 
         if (taskMsg) {
 
           taskMsg.textContent =
             "Submission successful! Your task is pending review.";
+
         }
+
 
         setTimeout(
           function() {
@@ -666,14 +891,84 @@ function initTask() {
           },
           1000
         );
+
       }
     );
+
   }
+
 }
+
 
 /* =========================================================
    WALLET
-   ========================================================= */
+========================================================= */
+
+function calculateWallet(user) {
+
+  const submissions =
+    getSubmissions();
+
+
+  const userSubmissions =
+    submissions.filter(function(item) {
+
+      return item.userPhone === user.phone;
+
+    });
+
+
+  let pending =
+    0;
+
+
+  let approved =
+    0;
+
+
+  userSubmissions.forEach(
+    function(item) {
+
+      const reward =
+        Number(item.reward) || 0;
+
+
+      if (
+        item.status ===
+        "Pending review"
+      ) {
+
+        pending += reward;
+
+      }
+
+
+      if (
+        item.status ===
+        "Approved"
+      ) {
+
+        approved += reward;
+
+      }
+
+    }
+  );
+
+
+  return {
+    submissions:
+      userSubmissions,
+
+    pending:
+      pending,
+
+    approved:
+      approved
+  };
+
+}
+
 
 function initWallet() {
 
@@ -682,20 +977,30 @@ function initWallet() {
       "availableBalance"
     );
 
+
   const pendingBalance =
     document.getElementById(
       "pendingBalance"
     );
+
 
   const totalEarned =
     document.getElementById(
       "totalEarned"
     );
 
+
   const transactionHistory =
     document.getElementById(
       "transactionHistory"
     );
+
+
+  const withdrawForm =
+    document.getElementById(
+      "withdrawForm"
+    );
+
 
   if (
     !availableBalance &&
@@ -703,87 +1008,58 @@ function initWallet() {
     !totalEarned &&
     !transactionHistory
   ) {
+
     return;
+
   }
+
 
   const user =
     getUser();
 
+
   if (!user) {
+
     return;
+
   }
 
-  const submissions =
-    getSubmissions();
 
-  const userSubmissions =
-    submissions.filter(
-      function(item) {
+  const wallet =
+    calculateWallet(user);
 
-        return (
-          item.userPhone ===
-          user.phone
-        );
-      }
-    );
-
-  let pending =
-    0;
-
-  let approved =
-    0;
-
-  userSubmissions.forEach(
-    function(item) {
-
-      const reward =
-        Number(item.reward) || 0;
-
-      if (
-        item.status ===
-        "Pending review"
-      ) {
-
-        pending +=
-          reward;
-      }
-
-      if (
-        item.status ===
-        "Approved"
-      ) {
-
-        approved +=
-          reward;
-      }
-    }
-  );
 
   if (availableBalance) {
 
     availableBalance.textContent =
-      `KSh ${approved.toFixed(2)}`;
+      `KSh ${wallet.approved.toFixed(2)}`;
+
   }
+
 
   if (pendingBalance) {
 
     pendingBalance.textContent =
-      `KSh ${pending.toFixed(2)}`;
+      `KSh ${wallet.pending.toFixed(2)}`;
+
   }
+
 
   if (totalEarned) {
 
     totalEarned.textContent =
-      `KSh ${approved.toFixed(2)}`;
+      `KSh ${wallet.approved.toFixed(2)}`;
+
   }
 
-  /* ---------------------------------------------------------
+
+  /* -------------------------------------------------------
      TRANSACTION HISTORY
-     --------------------------------------------------------- */
+  ------------------------------------------------------- */
 
   if (transactionHistory) {
 
-    if (!userSubmissions.length) {
+    if (!wallet.submissions.length) {
 
       transactionHistory.innerHTML =
         `<p class="muted">No transactions yet.</p>`;
@@ -791,7 +1067,7 @@ function initWallet() {
     } else {
 
       transactionHistory.innerHTML =
-        userSubmissions
+        wallet.submissions
           .slice()
           .reverse()
           .map(function(item) {
@@ -801,15 +1077,18 @@ function initWallet() {
                 item.submittedAt
               ).toLocaleString();
 
+
             return `
+
               <div class="transaction">
+
                 <strong>
                   ${item.taskName}
                 </strong>
 
                 <p>
-                  Reward: KSh
-                  ${Number(item.reward).toFixed(2)}
+                  Reward:
+                  KSh ${Number(item.reward).toFixed(2)}
                 </p>
 
                 <p>
@@ -820,29 +1099,30 @@ function initWallet() {
                 <small>
                   ${date}
                 </small>
+
               </div>
+
             `;
 
           })
           .join("");
+
     }
+
   }
 
-  /* ---------------------------------------------------------
+
+  /* -------------------------------------------------------
      WITHDRAWAL
-     --------------------------------------------------------- */
-
-  const withdrawForm =
-    document.getElementById(
-      "withdrawForm"
-    );
-
-  const withdrawMessage =
-    document.getElementById(
-      "withdrawMessage"
-    );
+  ------------------------------------------------------- */
 
   if (withdrawForm) {
+
+    const withdrawMessage =
+      document.getElementById(
+        "withdrawMessage"
+      );
+
 
     withdrawForm.addEventListener(
       "submit",
@@ -850,61 +1130,100 @@ function initWallet() {
 
         event.preventDefault();
 
+
         const mpesaNumber =
-          document.getElementById(
-            "mpesaNumber"
-          )?.value.trim();
+          document
+            .getElementById(
+              "mpesaNumber"
+            )
+            ?.value
+            .trim();
+
 
         const amount =
           Number(
-            document.getElementById(
-              "withdrawAmount"
-            )?.value
+            document
+              .getElementById(
+                "withdrawAmount"
+              )
+              ?.value
           );
+
 
         if (!mpesaNumber) {
 
           if (withdrawMessage) {
+
             withdrawMessage.textContent =
               "Please enter your M-PESA number.";
+
           }
 
           return;
+
         }
+
+
+        if (!validPhone(mpesaNumber)) {
+
+          if (withdrawMessage) {
+
+            withdrawMessage.textContent =
+              "Enter a valid Kenyan M-PESA number.";
+
+          }
+
+          return;
+
+        }
+
 
         if (!amount || amount <= 0) {
 
           if (withdrawMessage) {
+
             withdrawMessage.textContent =
               "Please enter a valid amount.";
+
           }
 
           return;
+
         }
 
-        if (amount > approved) {
+
+        if (amount > wallet.approved) {
 
           if (withdrawMessage) {
+
             withdrawMessage.textContent =
               "Insufficient available balance.";
+
           }
 
           return;
+
         }
 
-        /*
-          This records the request locally.
 
-          Real M-PESA payment processing should
-          be connected to a secure backend.
-        */
+        let withdrawals = [];
 
-        const withdrawals =
-          JSON.parse(
-            localStorage.getItem(
-              "earnlinkWithdrawals"
-            ) || "[]"
-          );
+
+        try {
+
+          withdrawals =
+            JSON.parse(
+              localStorage.getItem(
+                "earnlinkWithdrawals"
+              ) || "[]"
+            );
+
+        } catch (error) {
+
+          withdrawals = [];
+
+        }
+
 
         withdrawals.push({
 
@@ -925,7 +1244,9 @@ function initWallet() {
 
           status:
             "Pending"
+
         });
+
 
         localStorage.setItem(
           "earnlinkWithdrawals",
@@ -934,27 +1255,123 @@ function initWallet() {
           )
         );
 
+
         if (withdrawMessage) {
 
           withdrawMessage.textContent =
-            "Withdrawal request submitted successfully. Processing requires backend integration.";
+            "Withdrawal request saved. Real M-PESA payment requires backend integration.";
+
         }
 
+
         withdrawForm.reset();
+
       }
     );
+
   }
+
 }
+
+
+/* =========================================================
+   HOME BALANCES
+========================================================= */
+
+function initHome() {
+
+  const homeAvailable =
+    document.getElementById(
+      "homeAvailable"
+    );
+
+
+  const homePending =
+    document.getElementById(
+      "homePending"
+    );
+
+
+  const homeTotal =
+    document.getElementById(
+      "homeTotal"
+    );
+
+
+  if (
+    !homeAvailable &&
+    !homePending &&
+    !homeTotal
+  ) {
+
+    return;
+
+  }
+
+
+  const user =
+    getUser();
+
+
+  if (!user) {
+
+    return;
+
+  }
+
+
+  const wallet =
+    calculateWallet(user);
+
+
+  if (homeAvailable) {
+
+    homeAvailable.textContent =
+      `KSh ${wallet.approved.toFixed(2)}`;
+
+  }
+
+
+  if (homePending) {
+
+    homePending.textContent =
+      `KSh ${wallet.pending.toFixed(2)}`;
+
+  }
+
+
+  if (homeTotal) {
+
+    homeTotal.textContent =
+      `KSh ${wallet.approved.toFixed(2)}`;
+
+  }
+
+}
+
 
 /* =========================================================
    START APPLICATION
-   ========================================================= */
+========================================================= */
 
 document.addEventListener(
   "DOMContentLoaded",
   function() {
 
-    protectPage();
+    /*
+      This is important.
+
+      If the user opens the GitHub Pages
+      link without being logged in,
+      protectPage() sends them to login.html.
+    */
+
+    if (!protectPage()) {
+
+      return;
+
+    }
+
 
     initAuth();
 
@@ -963,6 +1380,8 @@ document.addEventListener(
     initTask();
 
     initWallet();
+
+    initHome();
 
   }
 );
