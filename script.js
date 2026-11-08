@@ -1,7 +1,11 @@
-const taskNote = `CLICK NEXT AND WATCH THE YOUTUBE VIDEO FOR 20-MINUTES VIDEO!
-PLEASE SCREEN RECORD YOUR SCREEN TO PROOF U FINISHED THE TASK 
-ONCE DONE SUBMIT YOUR PROOF FOR REVIEW 
-Thank you for participating! We hope you enjoy the task. ❤️
+
+const taskNote = `CLICK NEXT AND COMPLETE THE 20-MINUTE YOUTUBE CONTENT REVIEW!
+
+PLEASE SCREEN RECORD YOUR SCREEN TO SHOW YOUR COMPLETION.
+ONCE DONE, SUBMIT YOUR PROOF FOR REVIEW.
+
+Thank you for participating! We hope you enjoy the task. ❤️`;
+
 const channels = [
   "https://www.youtube.com/@kenyanationaltv",
   "https://www.youtube.com/@EPICGRAMke002",
@@ -24,95 +28,123 @@ const tasks = channels.map((url, index) => ({
   instructions: taskNote
 }));
 
+// -----------------------------
+// GENERAL FUNCTIONS
+// -----------------------------
+
 function logout() {
-  localStorage.removeItem("earnlink_logged_in");
-  location.href = "login.html";
+  localStorage.removeItem("earnlinkUser");
+  window.location.href = "login.html";
 }
 
 function initAuth() {
-  const path = location.pathname.split("/").pop();
+  const user = localStorage.getItem("earnlinkUser");
 
-  const protectedPages = [
-    "index.html",
-    "tasks.html",
-    "task.html",
-    "verification.html",
-    "wallet.html"
-  ];
+  const loginForm = document.getElementById("loginForm");
 
-  if (
-    protectedPages.includes(path) &&
-    !localStorage.getItem("earnlink_logged_in")
-  ) {
-    location.href = "login.html";
-  }
-}
+  if (loginForm) {
+    loginForm.addEventListener("submit", function (event) {
+      event.preventDefault();
 
-function setupForms() {
-  const signup = document.getElementById("signupForm");
+      const email = document.getElementById("email")?.value.trim();
+      const password = document.getElementById("password")?.value;
 
-  if (signup) {
-    signup.onsubmit = e => {
-      e.preventDefault();
-
-      const password = document.getElementById("password");
-      const confirm = document.getElementById("confirm");
-      const msg = document.getElementById("msg");
-
-      if (password && confirm && password.value !== confirm.value) {
-        if (msg) msg.textContent = "Passwords do not match.";
+      if (!email || !password) {
+        alert("Please enter your email and password.");
         return;
       }
 
-      localStorage.setItem("earnlink_logged_in", "1");
-      location.href = "index.html";
-    };
+      localStorage.setItem(
+        "earnlinkUser",
+        JSON.stringify({ email })
+      );
+
+      window.location.href = "index.html";
+    });
   }
 
-  const login = document.getElementById("loginForm");
+  const registerForm = document.getElementById("registerForm");
 
-  if (login) {
-    login.onsubmit = e => {
-      e.preventDefault();
-      localStorage.setItem("earnlink_logged_in", "1");
-      location.href = "index.html";
-    };
+  if (registerForm) {
+    registerForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+
+      const email = document.getElementById("email")?.value.trim();
+      const password = document.getElementById("password")?.value;
+
+      if (!email || !password) {
+        alert("Please fill in all required fields.");
+        return;
+      }
+
+      localStorage.setItem(
+        "earnlinkUser",
+        JSON.stringify({ email })
+      );
+
+      window.location.href = "index.html";
+    });
   }
 }
+
+// -----------------------------
+// TASK LIST
+// -----------------------------
 
 function renderTasks() {
-  const box = document.getElementById("taskList");
-  if (!box) return;
+  const taskContainer = document.getElementById("taskList");
 
-  box.innerHTML = tasks.map(task => `
-    <article class="task-card">
-      <p class="eyebrow">YOUTUBE TASK</p>
-      <h2>${task.name}</h2>
-      <p class="meta">Channel research • 20 minutes • Proof required</p>
-      <div class="reward">KSh ${task.reward}</div>
-      <a class="btn full" href="task.html?id=${task.id}">
-        Start Task →
+  if (!taskContainer) return;
+
+  taskContainer.innerHTML = "";
+
+  tasks.forEach(task => {
+    const card = document.createElement("div");
+
+    card.className = "task-card";
+
+    card.innerHTML = `
+      <h3>${task.name}</h3>
+      <p>${task.platform} Content Review</p>
+      <p class="task-reward">Reward: KSh ${task.reward}</p>
+      <p>Duration: 20 minutes</p>
+      <a class="btn" href="task.html?id=${task.id}">
+        Start Task
       </a>
-    </article>
-  `).join("");
+    `;
+
+    taskContainer.appendChild(card);
+  });
 }
 
-function initTask() {
-  const box = document.getElementById("taskName");
-  if (!box) return;
+// -----------------------------
+// TASK DETAILS AND TIMER
+// -----------------------------
 
-  const params = new URLSearchParams(location.search);
-  const id = Number(params.get("id")) || 1;
-  const task = tasks.find(t => t.id === id) || tasks[0];
+function initTask() {
+  const taskName = document.getElementById("taskName");
+
+  if (!taskName) return;
+
+  const params = new URLSearchParams(window.location.search);
+  const taskId = Number(params.get("id"));
+
+  const task = tasks.find(item => item.id === taskId);
+
+  if (!task) {
+    taskName.textContent = "Task not found";
+    return;
+  }
 
   const reward = document.getElementById("reward");
   const instructions = document.getElementById("instructions");
   const target = document.getElementById("target");
   const timer = document.getElementById("timer");
+  const proof = document.getElementById("proof");
   const submitButton = document.getElementById("submitTask");
   const taskMsg = document.getElementById("taskMsg");
 
-  box.textContent = task.name;
+  taskName.textContent = task.name;
 
   if (reward) {
     reward.textContent = `KSh ${task.reward}`;
@@ -120,36 +152,38 @@ function initTask() {
 
   if (instructions) {
     instructions.textContent = task.instructions;
-    instructions.style.whiteSpace = "pre-line";
   }
 
   if (target) {
     target.href = task.url;
     target.target = "_blank";
     target.rel = "noopener noreferrer";
-    target.textContent = "CLICK NEXT →";
   }
 
-  // 20-minute demonstration timer
-  const storageKey = `earnlink_task_${task.id}_start`;
-  let startTime = Number(sessionStorage.getItem(storageKey));
+  // -----------------------------
+  // 20-MINUTE TIMER
+  // -----------------------------
+
+  const duration = 20 * 60 * 1000;
+  const timerKey = `earnlink_timer_${task.id}`;
+
+  let startTime = sessionStorage.getItem(timerKey);
 
   if (!startTime) {
     startTime = Date.now();
-    sessionStorage.setItem(storageKey, String(startTime));
+    sessionStorage.setItem(timerKey, startTime);
+  } else {
+    startTime = Number(startTime);
   }
 
-  const endTime = startTime + 20 * 60 * 1000;
-  let completed = false;
+  let timerInterval;
 
   function updateTimer() {
-    const remaining = Math.max(
-      0,
-      Math.ceil((endTime - Date.now()) / 1000)
-    );
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, duration - elapsed);
 
-    const minutes = Math.floor(remaining / 60);
-    const seconds = remaining % 60;
+    const minutes = Math.floor(remaining / 60000);
+    const seconds = Math.floor((remaining % 60000) / 1000);
 
     if (timer) {
       timer.textContent =
@@ -157,71 +191,110 @@ function initTask() {
         `${String(seconds).padStart(2, "0")}`;
     }
 
-    if (remaining === 0 && !completed) {
-      completed = true;
-      clearInterval(interval);
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+
+      if (timer) {
+        timer.textContent = "20:00 completed";
+      }
 
       if (taskMsg) {
         taskMsg.textContent =
-          "Research time completed. You can now submit your proof.";
+          "Review period completed. You can now submit your proof.";
+      }
+
+      if (submitButton) {
+        submitButton.disabled = false;
       }
     }
   }
 
+  if (submitButton) {
+    submitButton.disabled = true;
+  }
+
   updateTimer();
-  const interval = setInterval(updateTimer, 1000);
+
+  timerInterval = setInterval(updateTimer, 1000);
+
+  // -----------------------------
+  // PROOF FILE SELECTION
+  // -----------------------------
+
+  if (proof) {
+    proof.addEventListener("change", function () {
+      if (taskMsg) {
+        taskMsg.textContent = proof.files.length
+          ? `Selected: ${proof.files[0].name}`
+          : "No proof selected.";
+      }
+    });
+  }
+
+  // -----------------------------
+  // SUBMIT TASK
+  // -----------------------------
 
   if (submitButton) {
-    submitButton.onclick = () => {
-      if (!completed) {
+    submitButton.addEventListener("click", function () {
+      const elapsed = Date.now() - startTime;
+
+      if (elapsed < duration) {
         if (taskMsg) {
           taskMsg.textContent =
-            "Please wait until the 20-minute timer finishes.";
+            "Please complete the 20-minute review period first.";
         }
         return;
       }
 
-      const proof = document.getElementById("proof");
-
-      if (!proof || !proof.files || !proof.files[0]) {
+      if (!proof || !proof.files || proof.files.length === 0) {
         if (taskMsg) {
-          taskMsg.textContent = "Please upload your proof file.";
+          taskMsg.textContent =
+            "Please select your screen recording proof.";
         }
         return;
       }
+
+      const user = JSON.parse(
+        localStorage.getItem("earnlinkUser") || "{}"
+      );
 
       const submissions = JSON.parse(
-        localStorage.getItem("earnlink_submissions") || "[]"
+        localStorage.getItem("earnlinkSubmissions") || "[]"
       );
 
       submissions.push({
         taskId: task.id,
         taskName: task.name,
         reward: task.reward,
-        proofName: proof.files[0].name,
+        userEmail: user.email || "Guest",
+        proofFileName: proof.files[0].name,
         submittedAt: new Date().toISOString(),
-        status: "Pending verification"
+        status: "Pending review"
       });
 
       localStorage.setItem(
-        "earnlink_submissions",
+        "earnlinkSubmissions",
         JSON.stringify(submissions)
       );
 
-      sessionStorage.removeItem(storageKey);
-
       if (taskMsg) {
         taskMsg.textContent =
-          "Submitted successfully. Your task is pending verification.";
+          "Your submission has been recorded and is pending review.";
       }
 
       submitButton.disabled = true;
-      clearInterval(interval);
-    };
+      clearInterval(timerInterval);
+    });
   }
 }
 
-initAuth();
-setupForms();
-renderTasks();
-initTask();
+// -----------------------------
+// INITIALIZE WEBSITE
+// -----------------------------
+
+document.addEventListener("DOMContentLoaded", function () {
+  initAuth();
+  renderTasks();
+  initTask();
+});
