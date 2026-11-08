@@ -1,17 +1,19 @@
 const tasks = [
   {
     id: 1,
-    name: "Campus Link KE Task #01",
+    name: "YOUTUBE 1",
     platform: "YouTube",
-    reward: 50,
+    reward: 10,
+    username: "Campus Link KE",
     url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Search for Campus Link KE on YouTube. Review its channel and prepare a short content research report."
+    instructions: "Search for Campus Link KE on YouTube. Review the channel, examine its videos, titles and thumbnails, and prepare a short research report."
   },
   {
     id: 2,
     name: "Campus Link KE Task #02",
     platform: "YouTube",
     reward: 50,
+    username: "Campus Link KE",
     url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
     instructions: "Review Campus Link KE videos, titles and thumbnails. Prepare your findings."
   },
@@ -20,6 +22,7 @@ const tasks = [
     name: "Campus Link KE Task #03",
     platform: "YouTube",
     reward: 75,
+    username: "Campus Link KE",
     url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
     instructions: "Analyse the content style and presentation of Campus Link KE."
   },
@@ -28,6 +31,7 @@ const tasks = [
     name: "Campus Link KE Task #04",
     platform: "YouTube",
     reward: 75,
+    username: "Campus Link KE",
     url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
     instructions: "Review Campus Link KE content and prepare a short research report."
   }
@@ -97,7 +101,7 @@ function renderTasks() {
     <article class="task-card">
       <p class="eyebrow">${t.platform}</p>
       <h2>${t.name}</h2>
-      <p class="meta">Campus Link KE • Research task</p>
+      <p class="meta">Campus Link KE • Research task • Proof required</p>
       <div class="reward">KSh ${t.reward}</div>
       <a class="btn full" href="task.html?id=${t.id}">
         Start Task →
@@ -123,8 +127,13 @@ function initTask() {
 
   box.textContent = task.name;
 
-  if (reward) reward.textContent = `KSh ${task.reward}`;
-  if (instructions) instructions.textContent = task.instructions;
+  if (reward) {
+    reward.textContent = `KSh ${task.reward}`;
+  }
+
+  if (instructions) {
+    instructions.textContent = task.instructions;
+  }
 
   if (target) {
     target.href = task.url;
@@ -133,14 +142,23 @@ function initTask() {
     target.textContent = "Search Campus Link KE on YouTube →";
   }
 
-  // Automatically start the one-hour timer.
-  const startTime = Date.now();
-  const endTime = startTime + 3600000;
+  // Automatically start one-hour countdown.
+  const storageKey = `earnlink_task_${task.id}_start`;
+  let startTime = Number(sessionStorage.getItem(storageKey));
 
+  if (!startTime) {
+    startTime = Date.now();
+    sessionStorage.setItem(storageKey, String(startTime));
+  }
+
+  const endTime = startTime + 3600000;
   let completed = false;
 
   function updateTimer() {
-    const remaining = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
+    const remaining = Math.max(
+      0,
+      Math.ceil((endTime - Date.now()) / 1000)
+    );
 
     const hours = Math.floor(remaining / 3600);
     const minutes = Math.floor((remaining % 3600) / 60);
@@ -158,19 +176,21 @@ function initTask() {
 
       if (taskMsg) {
         taskMsg.textContent =
-          "One-hour timer completed. You can now submit your proof.";
+          "One-hour timer completed. You can now submit your research proof.";
       }
     }
   }
 
   updateTimer();
+
   const interval = setInterval(updateTimer, 1000);
 
   if (submitButton) {
     submitButton.onclick = () => {
       if (!completed) {
         if (taskMsg) {
-          taskMsg.textContent = "Please wait until the one-hour timer finishes.";
+          taskMsg.textContent =
+            "Please wait until the one-hour timer finishes.";
         }
         return;
       }
@@ -201,6 +221,8 @@ function initTask() {
         "earnlink_submissions",
         JSON.stringify(submissions)
       );
+
+      sessionStorage.removeItem(storageKey);
 
       if (taskMsg) {
         taskMsg.textContent =
