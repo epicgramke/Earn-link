@@ -4,8 +4,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EarnLink | Task</title>
+  <title>EarnLink | YouTube Task 1</title>
   <link rel="stylesheet" href="style.css">
+
+  <style>
+    .task-detail h1 {
+      margin-bottom: 12px;
+    }
+
+    .task-detail .reward {
+      margin-bottom: 28px;
+    }
+
+    .timer {
+      margin-top: 28px;
+      margin-bottom: 28px;
+    }
+
+    .task-instructions {
+      margin-top: 24px;
+      margin-bottom: 25px;
+      line-height: 1.8;
+    }
+
+    .task-detail .record {
+      margin-top: 30px;
+    }
+  </style>
 </head>
 
 <body>
@@ -18,48 +43,47 @@
 
     <div class="panel task-detail">
 
-      <p class="eyebrow">AVAILABLE TASK</p>
+      <p class="eyebrow">YOUTUBE TASK</p>
 
-      <h1 id="taskName">Task</h1>
+      <h1 id="taskName">YOUTUBE 1</h1>
 
       <div class="reward">
-        Reward: <b id="reward">KSh 0</b>
+        Reward: <b id="reward">KSh 10</b>
       </div>
 
       <div class="timer" id="timer">01:00:00</div>
 
-      <p id="instructions">
-        Complete the task according to the instructions below.
+      <p id="instructions" class="task-instructions">
+        Search for Campus Link KE on YouTube. Review the channel,
+        examine its videos and prepare a short research report.
       </p>
 
-      <a id="target" class="btn full" href="#" target="_blank" rel="noopener noreferrer">
-        Search on YouTube →
+      <a
+        id="target"
+        class="btn full"
+        href="https://www.youtube.com/results?search_query=Campus+Link+KE"
+        target="_blank"
+        rel="noopener noreferrer">
+        Search Campus Link KE on YouTube →
       </a>
 
-      <button class="btn full" id="startTimer">
-        Start 1-Hour Research Timer
-      </button>
-
       <div class="record">
-
         <h2>Upload Task Proof</h2>
 
         <p>
-          Complete your research and upload your proof video for review.
+          Upload your research report or screenshots for review.
         </p>
 
         <input
           id="proof"
           type="file"
-          accept="video/*,image/*,.pdf"
-        >
+          accept="image/*,.pdf,video/*">
 
         <button class="btn full" id="submitTask">
           Submit for Verification
         </button>
 
         <p id="taskMsg" class="msg"></p>
-
       </div>
 
     </div>
