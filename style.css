@@ -218,57 +218,43 @@ h1 span {
   color: var(--gold);
 }
 
-/* ==================================
-   FLOATING LUXURY BOTTOM NAVIGATION
-   THREE ITEMS: HOME, TASKS, WALLET
-================================== */
+/* BOTTOM NAVIGATION */
 
 .bottom-navigation {
   position: fixed;
   bottom: calc(14px + env(safe-area-inset-bottom));
   left: 50%;
   transform: translateX(-50%);
-
   width: min(420px, calc(100% - 28px));
   min-height: 76px;
-
   display: flex;
   justify-content: space-around;
   align-items: center;
-
   margin: 0;
   padding: 10px 8px;
-
   background: rgba(15, 15, 15, 0.97);
   border: 1px solid rgba(255, 229, 0, 0.35);
   border-radius: 28px;
-
   box-shadow:
     0 8px 30px rgba(0, 0, 0, 0.65),
     0 0 18px rgba(255, 229, 0, 0.12);
-
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
-
   z-index: 1000;
 }
 
 .bottom-navigation a {
   flex: 1;
   min-width: 0;
-
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-
   gap: 5px;
   padding: 8px 2px;
-
   color: #888;
   border: none;
   border-radius: 18px;
-
   transition: all 0.25s ease;
 }
 
@@ -335,9 +321,13 @@ h1 span {
   margin: 15px 0;
 }
 
+/* TASK DETAILS */
+
 .task-detail {
   text-align: left;
 }
+
+/* RED TIMER */
 
 .timer {
   font-size: 52px;
@@ -345,9 +335,68 @@ h1 span {
   text-align: center;
   padding: 25px;
   margin: 20px 0;
-  border: 1px solid #3d3900;
+  border: 1px solid red;
   border-radius: 15px;
-  color: var(--gold);
+  color: red !important;
+}
+
+/* UPLOAD MP4 FOR VERIFICATION */
+
+.upload-section {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 22px;
+  margin-top: 25px;
+  text-align: center;
+}
+
+.upload-section h3 {
+  color: #fff;
+  font-size: 17px;
+  font-weight: 900;
+  margin: 0 0 22px;
+}
+
+.upload-section input[type="file"] {
+  display: block;
+  width: 100%;
+  padding: 15px;
+  margin-bottom: 20px;
+  background: #111;
+  border: 1px dashed var(--gold);
+  border-radius: 10px;
+  color: #fff;
+}
+
+.submit-proof {
+  display: block;
+  width: 100%;
+  background: var(--gold);
+  color: #050505;
+  border: none;
+  border-radius: 12px;
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 900;
+  cursor: pointer;
+  transition: .25s;
+}
+
+.submit-proof:hover {
+  background: #fff04d;
+}
+
+.submit-proof:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
+#taskMsg {
+  color: var(--muted);
+  font-size: 13px;
+  margin-top: 15px;
+  overflow-wrap: anywhere;
 }
 
 /* RECORDS AND SUBMISSIONS */
@@ -393,7 +442,7 @@ input:focus {
   color: var(--gold);
 }
 
-/* LOGIN / AUTHENTICATION */
+/* LOGIN */
 
 .auth-body {
   min-height: 100vh;
@@ -504,5 +553,13 @@ input:focus {
 
   .submission {
     flex-direction: column;
+  }
+
+  .upload-section {
+    padding: 18px;
+  }
+
+  .timer {
+    font-size: 44px;
   }
 }
