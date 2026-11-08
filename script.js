@@ -160,7 +160,7 @@ function initTask() {
   // 20-MINUTE TIMER
   // -----------------------------
 
-  const duration = 20 * 60 * 1000;
+  const duration = 0.5 * 60 * 1000;
   const timerKey = `earnlink_timer_${task.id}`;
 
   let startTime = sessionStorage.getItem(timerKey);
