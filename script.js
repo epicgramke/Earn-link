@@ -1,34 +1,235 @@
-const tasks=[
-{id:1,name:"TikTok Channel Task #01",platform:"TikTok",reward:50,url:"https://www.tiktok.com/",instructions:"Open the assigned TikTok campaign and complete the required action while recording your screen."},
-{id:2,name:"Instagram Channel Task #01",platform:"Instagram",reward:50,url:"https://www.instagram.com/",instructions:"Open the assigned Instagram campaign and complete the required action while recording your screen."},
-{id:3,name:"TikTok Channel Task #02",platform:"TikTok",reward:75,url:"https://www.tiktok.com/",instructions:"Complete the assigned campaign and keep your screen recording running."},
-{id:4,name:"Instagram Channel Task #02",platform:"Instagram",reward:75,url:"https://www.instagram.com/",instructions:"Complete the assigned campaign and keep your screen recording running."}
+
+const tasks = [
+  {
+    id: 1,
+    name: "YouTube Channel Research #01",
+    platform: "YouTube",
+    reward: 50,
+    username: "Enter YouTube username",
+    url: "https://www.youtube.com/results?search_query=YouTube+channels",
+    instructions: "Search for the supplied YouTube username. Review 10 relevant channels. Record their names and the type of content they publish. Choose one video and analyse its content."
+  },
+  {
+    id: 2,
+    name: "YouTube Channel Research #02",
+    platform: "YouTube",
+    reward: 50,
+    username: "Enter YouTube username",
+    url: "https://www.youtube.com/results?search_query=YouTube+channel+research",
+    instructions: "Research 10 YouTube channels. Compare their video titles, thumbnails and content topics. Write a short report about what makes their content different."
+  },
+  {
+    id: 3,
+    name: "YouTube Content Analysis #03",
+    platform: "YouTube",
+    reward: 75,
+    username: "Enter YouTube username",
+    url: "https://www.youtube.com/results?search_query=YouTube+content+analysis",
+    instructions: "Review 10 channels and analyse their content styles. Watch a relevant video and write down its main points."
+  },
+  {
+    id: 4,
+    name: "YouTube Content Analysis #04",
+    platform: "YouTube",
+    reward: 75,
+    username: "Enter YouTube username",
+    url: "https://www.youtube.com/results?search_query=YouTube+video+research",
+    instructions: "Research 10 channels, compare their video presentation and prepare a brief content research report."
+  }
 ];
 
-function logout(){localStorage.removeItem("earnlink_logged_in");location.href="login.html"}
-function initAuth(){
- const path=location.pathname.split("/").pop();
- if((path==="index.html"||path==="tasks.html"||path==="task.html"||path==="verification.html"||path==="wallet.html")&&!localStorage.getItem("earnlink_logged_in")){location.href="login.html"}
+function logout() {
+  localStorage.removeItem("earnlink_logged_in");
+  location.href = "login.html";
 }
-function setupForms(){
- const signup=document.getElementById("signupForm");
- if(signup)signup.onsubmit=e=>{e.preventDefault();if(password.value!==confirm.value){msg.textContent="Passwords do not match.";return}localStorage.setItem("earnlink_logged_in","1");location.href="index.html"};
- const login=document.getElementById("loginForm");
- if(login)login.onsubmit=e=>{e.preventDefault();localStorage.setItem("earnlink_logged_in","1");location.href="index.html"};
+
+function initAuth() {
+  const path = location.pathname.split("/").pop();
+
+  const protectedPages = [
+    "index.html",
+    "tasks.html",
+    "task.html",
+    "verification.html",
+    "wallet.html"
+  ];
+
+  if (
+    protectedPages.includes(path) &&
+    !localStorage.getItem("earnlink_logged_in")
+  ) {
+    location.href = "login.html";
+  }
 }
-function renderTasks(){
- const box=document.getElementById("taskList");if(!box)return;
- box.innerHTML=tasks.map(t=>`<article class="task-card"><p class="eyebrow">${t.platform}</p><h2>${t.name}</h2><p class="meta">1 hour required • Screen recording • Verification required</p><div class="reward">KSh ${t.reward}</div><a class="btn full" href="task.html?id=${t.id}">Open Task →</a></article>`).join("");
+
+function setupForms() {
+  const signup = document.getElementById("signupForm");
+
+  if (signup) {
+    signup.onsubmit = e => {
+      e.preventDefault();
+
+      const password = document.getElementById("password");
+      const confirm = document.getElementById("confirm");
+      const msg = document.getElementById("msg");
+
+      if (password && confirm && password.value !== confirm.value) {
+        if (msg) msg.textContent = "Passwords do not match.";
+        return;
+      }
+
+      localStorage.setItem("earnlink_logged_in", "1");
+      location.href = "index.html";
+    };
+  }
+
+  const login = document.getElementById("loginForm");
+
+  if (login) {
+    login.onsubmit = e => {
+      e.preventDefault();
+      localStorage.setItem("earnlink_logged_in", "1");
+      location.href = "index.html";
+    };
+  }
 }
-function initTask(){
- const box=document.getElementById("taskName");if(!box)return;
- const id=new URLSearchParams(location.search).get("id")||1;
- const t=tasks.find(x=>x.id==id)||tasks[0];
- box.textContent=t.name;document.getElementById("reward").textContent=`KSh ${t.reward}`;document.getElementById("instructions").textContent=t.instructions;document.getElementById("target").href=t.url;
- let seconds=3600, started=false;
- const timer=document.getElementById("timer");
- const tick=()=>{let h=Math.floor(seconds/3600),m=Math.floor(seconds%3600/60),s=seconds%60;timer.textContent=[h,m,s].map(x=>String(x).padStart(2,"0")).join(":");if(seconds>0)seconds--};
- tick();const interval=setInterval(tick,1000);
- document.getElementById("submitTask").onclick=()=>{const file=document.getElementById("proof").files[0];if(seconds>0){taskMsg.textContent="Please complete the 1-hour timer before submitting.";return}if(!file){taskMsg.textContent="Please upload your screen recording.";return}localStorage.setItem("earnlink_pending","1");taskMsg.textContent="Submitted successfully. Your task is now pending verification.";clearInterval(interval)};
+
+function renderTasks() {
+  const box = document.getElementById("taskList");
+  if (!box) return;
+
+  box.innerHTML = tasks.map(t => `
+    <article class="task-card">
+      <p class="eyebrow">${t.platform}</p>
+      <h2>${t.name}</h2>
+      <p class="meta">Channel research • 10 channels • Proof required</p>
+      <div class="reward">KSh ${t.reward}</div>
+      <a class="btn full" href="task.html?id=${t.id}">
+        Start Task →
+      </a>
+    </article>
+  `).join("");
 }
-initAuth();setupForms();renderTasks();initTask();
+
+function initTask() {
+  const box = document.getElementById("taskName");
+  if (!box) return;
+
+  const params = new URLSearchParams(location.search);
+  const id = Number(params.get("id")) || 1;
+  const task = tasks.find(t => t.id === id) || tasks[0];
+
+  const reward = document.getElementById("reward");
+  const instructions = document.getElementById("instructions");
+  const target = document.getElementById("target");
+  const timer = document.getElementById("timer");
+  const submitButton = document.getElementById("submitTask");
+  const taskMsg = document.getElementById("taskMsg");
+
+  box.textContent = task.name;
+
+  if (reward) reward.textContent = `KSh ${task.reward}`;
+  if (instructions) instructions.textContent = task.instructions;
+
+  if (target) {
+    target.href = task.url;
+    target.target = "_blank";
+    target.rel = "noopener noreferrer";
+    target.textContent = "Search on YouTube →";
+  }
+
+  let seconds = 3600;
+  let interval = null;
+  let started = false;
+
+  function updateTimer() {
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    if (timer) {
+      timer.textContent = [hours, minutes, remainingSeconds]
+        .map(value => String(value).padStart(2, "0"))
+        .join(":");
+    }
+  }
+
+  updateTimer();
+
+  const startButton = document.getElementById("startTimer");
+
+  if (startButton) {
+    startButton.onclick = () => {
+      if (started) return;
+
+      started = true;
+      startButton.disabled = true;
+      startButton.textContent = "Timer Running";
+
+      interval = setInterval(() => {
+        if (seconds > 0) {
+          seconds--;
+          updateTimer();
+        } else {
+          clearInterval(interval);
+          if (taskMsg) {
+            taskMsg.textContent =
+              "Research time completed. You can now submit your proof.";
+          }
+        }
+      }, 1000);
+    };
+  }
+
+  if (submitButton) {
+    submitButton.onclick = () => {
+      const proof = document.getElementById("proof");
+
+      if (seconds > 0) {
+        if (taskMsg) {
+          taskMsg.textContent =
+            "Please complete the one-hour research timer first.";
+        }
+        return;
+      }
+
+      if (!proof || !proof.files || !proof.files[0]) {
+        if (taskMsg) {
+          taskMsg.textContent = "Please upload your proof file.";
+        }
+        return;
+      }
+
+      const submissions = JSON.parse(
+        localStorage.getItem("earnlink_submissions") || "[]"
+      );
+
+      submissions.push({
+        taskId: task.id,
+        taskName: task.name,
+        reward: task.reward,
+        proofName: proof.files[0].name,
+        submittedAt: new Date().toISOString(),
+        status: "Pending verification"
+      });
+
+      localStorage.setItem(
+        "earnlink_submissions",
+        JSON.stringify(submissions)
+      );
+
+      if (taskMsg) {
+        taskMsg.textContent =
+          "Submitted successfully. Your task is pending verification.";
+      }
+
+      submitButton.disabled = true;
+      if (interval) clearInterval(interval);
+    };
+  }
+}
+
+initAuth();
+setupForms();
+renderTasks();
+initTask();
