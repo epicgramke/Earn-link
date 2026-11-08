@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>EarnLink | Task Details</title>
 
 <style>
@@ -12,16 +13,25 @@
   padding: 0;
 }
 
+:root {
+  --yellow: #facc15;
+  --yellow-dark: #eab308;
+  --black: #000;
+  --card: #111;
+  --border: #292929;
+  --muted: #999;
+}
+
 body {
   font-family: Arial, sans-serif;
-  background: #000;
-  color: #fff;
+  background: var(--black);
+  color: white;
   min-height: 100vh;
 }
 
 header {
   background: #080808;
-  border-bottom: 1px solid #292929;
+  border-bottom: 1px solid var(--border);
   padding: 18px 20px;
   display: flex;
   align-items: center;
@@ -29,9 +39,9 @@ header {
 }
 
 .logo {
-  font-size: 24px;
+  font-size: 25px;
   font-weight: 800;
-  color: #facc15;
+  color: var(--yellow);
 }
 
 .logout {
@@ -58,9 +68,9 @@ header {
 }
 
 .card {
-  background: #111;
+  background: var(--card);
   padding: 24px;
-  border: 1px solid #292929;
+  border: 1px solid var(--border);
   border-radius: 16px;
   box-shadow: 0 5px 25px rgba(0,0,0,.5);
 }
@@ -68,7 +78,7 @@ header {
 .tag {
   display: inline-block;
   background: #422006;
-  color: #facc15;
+  color: var(--yellow);
   padding: 7px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -78,14 +88,13 @@ header {
 h2 {
   margin-top: 16px;
   font-size: 25px;
-  color: white;
 }
 
 .subtitle {
-  color: #999;
-  margin-top: 7px;
+  color: var(--muted);
+  margin-top: 8px;
   font-size: 14px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .reward-box {
@@ -99,35 +108,17 @@ h2 {
   align-items: center;
 }
 
-.reward-box span {
+.reward-box span,
+.reward-box strong {
   color: #4ade80;
+}
+
+.reward-box span {
   font-size: 14px;
 }
 
 .reward-box strong {
-  color: #4ade80;
   font-size: 25px;
-}
-
-.timer-box {
-  margin-top: 22px;
-  background: #050505;
-  border: 1px solid #333;
-  padding: 23px;
-  text-align: center;
-  border-radius: 13px;
-}
-
-.timer-box p {
-  color: #aaa;
-  font-size: 13px;
-}
-
-#timer {
-  font-size: 42px;
-  font-weight: bold;
-  margin: 12px 0;
-  color: #facc15;
 }
 
 .section {
@@ -137,7 +128,35 @@ h2 {
 .section h3 {
   font-size: 16px;
   margin-bottom: 12px;
+}
+
+.video-box {
+  background: #080808;
+  border: 1px solid #333;
+  padding: 18px;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.video-icon {
+  font-size: 35px;
+  margin-bottom: 10px;
+}
+
+.youtube-btn {
+  display: block;
+  margin-top: 15px;
+  padding: 15px;
+  background: #dc2626;
   color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 9px;
+  font-weight: bold;
+}
+
+.youtube-btn:hover {
+  background: #b91c1c;
 }
 
 .instructions {
@@ -148,33 +167,14 @@ h2 {
   color: #ddd;
   font-size: 14px;
   line-height: 1.7;
-  white-space: pre-line;
-}
-
-.youtube-btn {
-  display: block;
-  margin-top: 14px;
-  padding: 15px;
-  background: #dc2626;
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 9px;
-  font-weight: bold;
-  transition: background .2s;
-}
-
-.youtube-btn:hover {
-  background: #b91c1c;
 }
 
 .upload-box {
-  border: 2px dashed #444;
+  border: 2px dashed #666;
   padding: 22px;
   text-align: center;
   border-radius: 12px;
   background: #191919;
-  color: white;
 }
 
 .upload-box input {
@@ -183,11 +183,30 @@ h2 {
   color: white;
 }
 
+.upload-box input::file-selector-button {
+  background: var(--yellow);
+  color: #000;
+  border: none;
+  padding: 10px;
+  border-radius: 6px;
+  font-weight: bold;
+  margin-right: 8px;
+  cursor: pointer;
+}
+
+#fileInfo {
+  color: var(--yellow);
+  font-size: 13px;
+  margin-top: 14px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+
 #taskMsg {
   font-size: 13px;
   color: #aaa;
   margin-top: 12px;
-  line-height: 1.5;
+  line-height: 1.6;
 }
 
 .submit-btn {
@@ -196,22 +215,32 @@ h2 {
   padding: 16px;
   border: none;
   border-radius: 9px;
-  background: #eab308;
+  background: var(--yellow-dark);
   color: #000;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
-  transition: background .2s;
-}
-
-.submit-btn:not(:disabled):hover {
-  background: #facc15;
 }
 
 .submit-btn:disabled {
   background: #333;
   color: #888;
   cursor: not-allowed;
+}
+
+.submit-btn:not(:disabled):hover {
+  background: var(--yellow);
+}
+
+.notice {
+  background: #1c1a0b;
+  border: 1px solid #66520b;
+  color: #e5d48a;
+  padding: 13px;
+  border-radius: 9px;
+  font-size: 12px;
+  line-height: 1.6;
+  margin-top: 18px;
 }
 
 .footer {
@@ -229,10 +258,6 @@ h2 {
   .card {
     padding: 19px;
   }
-
-  #timer {
-    font-size: 38px;
-  }
 }
 </style>
 </head>
@@ -240,70 +265,136 @@ h2 {
 <body>
 
 <header>
-  <div class="logo">WELCOME</div>
-  <a href="#" class="logout" onclick="logout()">Logout</a>
+  <div class="logo">EARNLINK</div>
+
+  <a href="#" class="logout" onclick="logout(event)">
+    Logout
+  </a>
 </header>
 
 <div class="container">
 
-  <a href="index.html" class="back">← Back to Tasks</a>
+  <a href="index.html" class="back">
+    ← Back to Tasks
+  </a>
 
   <div class="card">
 
-    <span class="tag">WATCH TO EARN</span>
+    <span class="tag">WATCH & REVIEW</span>
 
     <h2 id="taskName">Loading Task...</h2>
 
     <p class="subtitle">
-      WATCH VIDEOS, SUBSCRIBE AND LIKE THE VIDEOS TO EARN REWARDS.
+      COMPLETE THE ASSIGNED CONTENT REVIEW AND
+      SUBMIT YOUR SCREEN RECORDING FOR ADMIN REVIEW.
     </p>
+
+    <!-- REWARD -->
 
     <div class="reward-box">
       <span>Task Reward</span>
       <strong id="reward">KSh 10</strong>
     </div>
 
-    <div class="timer-box">
-      <p>WATCH NOW BEFORE TIME ENDS</p>
-      <div id="timer">00:50</div>
-      <p>ALMOST THERE.</p>
-    </div>
+    <!-- VIDEO -->
 
     <div class="section">
-      <h3>Task Instructions</h3>
-      <div class="instructions" id="instructions">
-        OPEN THE YOUTUBE CHANNEL BELOW AND CONTINUE WITH THE TASK. FOLLOW THE INSTRUCTIONS AND SUBMIT YOUR PROOF.
+
+      <h3>Assigned YouTube Video</h3>
+
+      <div class="video-box">
+
+        <div class="video-icon">▶️</div>
+
+        <p>Open the assigned video below.</p>
+
+        <p class="subtitle">
+          Review the content and prepare your feedback.
+        </p>
+
+        <a
+          href="#"
+          id="target"
+          class="youtube-btn"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Open YouTube Video
+        </a>
+
       </div>
+
     </div>
 
-    <div class="section">
-      <h3>TAP YOUTUBE LINK</h3>
-      <a href="#" id="target" class="youtube-btn"
-         target="_blank" rel="noopener noreferrer">
-        Open YouTube Channel
-      </a>
-    </div>
+    <!-- INSTRUCTIONS -->
 
     <div class="section">
+
+      <h3>Task Instructions</h3>
+
+      <div class="instructions" id="instructions">
+        1. Open the assigned YouTube video.
+
+        2. Review the content carefully.
+
+        3. Record your screen while completing the review.
+
+        4. Return to EarnLink.
+
+        5. Upload your recording.
+
+        6. Submit your proof for admin review.
+      </div>
+
+    </div>
+
+    <!-- PROOF UPLOAD -->
+
+    <div class="section">
+
       <h3>Submit Your Proof</h3>
 
       <div class="upload-box">
+
         <p>📹 Upload your screen recording</p>
-        <p class="subtitle">Select your recording from your device.</p>
+
+        <p class="subtitle">
+          Select a video recording from your device.
+        </p>
 
         <input
           type="file"
           id="proof"
           accept="video/*"
         >
+
+        <div id="fileInfo">
+          No recording selected.
+        </div>
+
       </div>
 
       <p id="taskMsg">
-        Select your proof when your review is complete.
+        Select your recording to continue.
       </p>
+
     </div>
 
-    <button id="submitTask" class="submit-btn" disabled>
+    <!-- NOTICE -->
+
+    <div class="notice">
+      Your submission will be reviewed by an administrator.
+      Uploading proof does not guarantee automatic approval
+      or an immediate reward.
+    </div>
+
+    <!-- SUBMIT -->
+
+    <button
+      id="submitTask"
+      class="submit-btn"
+      disabled
+    >
       Submit for Review
     </button>
 
@@ -315,7 +406,215 @@ h2 {
 
 </div>
 
-<script src="script.js"></script>
+<script>
+
+// ==================================
+// EARNLINK TASK SETTINGS
+// ==================================
+
+const TASK = {
+  id: "TASK001",
+  name: "Video Content Review",
+  reward: "KSh 10",
+
+  // Replace this with your actual YouTube video URL.
+  youtubeUrl: "https://www.youtube.com/watch?v=YOUR_VIDEO_ID"
+};
+
+// Set this to your real backend submission endpoint.
+const SUBMISSION_ENDPOINT = "/api/tasks/submit";
+
+
+// ==================================
+// LOAD TASK INFORMATION
+// ==================================
+
+document.getElementById("taskName").textContent = TASK.name;
+
+document.getElementById("reward").textContent = TASK.reward;
+
+document.getElementById("target").href = TASK.youtubeUrl;
+
+
+// ==================================
+// FILE UPLOAD
+// ==================================
+
+const proofInput = document.getElementById("proof");
+
+const submitBtn = document.getElementById("submitTask");
+
+const fileInfo = document.getElementById("fileInfo");
+
+const taskMsg = document.getElementById("taskMsg");
+
+const MAX_FILE_SIZE = 200 * 1024 * 1024;
+
+let selectedFile = null;
+let linkOpened = false;
+let submitting = false;
+
+
+// Record that the user opened the external video link.
+// This does NOT verify that the video was watched.
+
+document.getElementById("target").addEventListener("click", function() {
+  linkOpened = true;
+  updateButton();
+});
+
+
+// Validate selected recording.
+
+proofInput.addEventListener("change", function() {
+
+  selectedFile = null;
+
+  const file = proofInput.files[0];
+
+  if (!file) {
+    fileInfo.textContent = "No recording selected.";
+    taskMsg.textContent = "Select your recording to continue.";
+    updateButton();
+    return;
+  }
+
+  if (!file.type.startsWith("video/")) {
+    proofInput.value = "";
+    fileInfo.textContent = "Invalid file.";
+    taskMsg.textContent = "Please upload a video recording.";
+    updateButton();
+    return;
+  }
+
+  if (file.size > MAX_FILE_SIZE) {
+    proofInput.value = "";
+    fileInfo.textContent = "File is too large.";
+    taskMsg.textContent = "Maximum file size is 200 MB.";
+    updateButton();
+    return;
+  }
+
+  selectedFile = file;
+
+  const sizeMB = (file.size / (1024 * 1024)).toFixed(2);
+
+  fileInfo.textContent =
+    "Selected: " + file.name + " (" + sizeMB + " MB)";
+
+  taskMsg.textContent =
+    "Recording selected. You can submit your proof.";
+
+  updateButton();
+
+});
+
+
+// ==================================
+// SUBMIT BUTTON
+// ==================================
+
+function updateButton() {
+
+  submitBtn.disabled =
+    !selectedFile ||
+    !linkOpened ||
+    submitting;
+
+}
+
+
+// ==================================
+// SUBMIT TASK FOR ADMIN REVIEW
+// ==================================
+
+submitBtn.addEventListener("click", async function() {
+
+  if (!selectedFile || !linkOpened || submitting) {
+    return;
+  }
+
+  submitting = true;
+
+  updateButton();
+
+  submitBtn.textContent = "Uploading...";
+
+  taskMsg.textContent =
+    "Please wait while your recording is uploaded.";
+
+  const formData = new FormData();
+
+  formData.append("taskId", TASK.id);
+
+  formData.append("videoUrl", TASK.youtubeUrl);
+
+  formData.append("proof", selectedFile);
+
+  try {
+
+    const response = await fetch(SUBMISSION_ENDPOINT, {
+      method: "POST",
+      body: formData,
+      credentials: "same-origin"
+    });
+
+    if (!response.ok) {
+      throw new Error("Upload failed. Please try again.");
+    }
+
+    const result = await response.json();
+
+    if (!result.success) {
+      throw new Error(
+        result.message || "Submission could not be completed."
+      );
+    }
+
+    taskMsg.textContent =
+      "Your proof has been submitted successfully for admin review.";
+
+    fileInfo.textContent =
+      "Submission received successfully.";
+
+    submitBtn.textContent = "Submitted for Review";
+
+    proofInput.disabled = true;
+
+    submitting = false;
+
+    submitBtn.disabled = true;
+
+  } catch (error) {
+
+    taskMsg.textContent =
+      error.message ||
+      "Unable to submit. Please try again later.";
+
+    submitBtn.textContent = "Try Again";
+
+    submitting = false;
+
+    updateButton();
+
+  }
+
+});
+
+
+// ==================================
+// LOGOUT
+// ==================================
+
+function logout(event) {
+
+  event.preventDefault();
+
+  window.location.href = "login.html";
+
+}
+
+</script>
 
 </body>
 </html>
