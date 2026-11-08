@@ -21,7 +21,7 @@ body {
 
 header {
   background: #080808;
-  border-bottom: 1px solid #222;
+  border-bottom: 1px solid #292929;
   padding: 18px 20px;
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@ header {
 .logo {
   font-size: 24px;
   font-weight: 800;
-  color: #38bdf8;
+  color: #facc15;
 }
 
 .logout {
@@ -67,8 +67,8 @@ header {
 
 .tag {
   display: inline-block;
-  background: #172554;
-  color: #60a5fa;
+  background: #422006;
+  color: #facc15;
   padding: 7px 12px;
   border-radius: 20px;
   font-size: 12px;
@@ -127,7 +127,7 @@ h2 {
   font-size: 42px;
   font-weight: bold;
   margin: 12px 0;
-  color: #38bdf8;
+  color: #facc15;
 }
 
 .section {
@@ -161,6 +161,7 @@ h2 {
   text-decoration: none;
   border-radius: 9px;
   font-weight: bold;
+  transition: background .2s;
 }
 
 .youtube-btn:hover {
@@ -195,11 +196,16 @@ h2 {
   padding: 16px;
   border: none;
   border-radius: 9px;
-  background: #2563eb;
-  color: white;
+  background: #eab308;
+  color: #000;
   font-size: 16px;
   font-weight: bold;
   cursor: pointer;
+  transition: background .2s;
+}
+
+.submit-btn:not(:disabled):hover {
+  background: #facc15;
 }
 
 .submit-btn:disabled {
@@ -234,22 +240,22 @@ h2 {
 <body>
 
 <header>
-  <div class="logo">WELCOME </div>
+  <div class="logo">WELCOME</div>
   <a href="#" class="logout" onclick="logout()">Logout</a>
 </header>
 
 <div class="container">
 
-  <a href="index.html" class="back"></a>
+  <a href="index.html" class="back">← Back to Tasks</a>
 
   <div class="card">
 
-    <span class="tag">WATCH TO EARN </span>
+    <span class="tag">WATCH TO EARN</span>
 
     <h2 id="taskName">Loading Task...</h2>
 
     <p class="subtitle">
-      WATCH VIDEOS SUBSCRIBE AND LIKE THE VIDEOS TO EARN REWARDS.
+      WATCH VIDEOS, SUBSCRIBE AND LIKE THE VIDEOS TO EARN REWARDS.
     </p>
 
     <div class="reward-box">
@@ -259,14 +265,14 @@ h2 {
 
     <div class="timer-box">
       <p>WATCH NOW BEFORE TIME ENDS</p>
-      <div id="timer">00.50</div>
+      <div id="timer">00:50</div>
       <p>ALMOST THERE.</p>
     </div>
 
     <div class="section">
       <h3>Task Instructions</h3>
       <div class="instructions" id="instructions">
-        OPEN YOUTUBE CHANNEL BELOW AND CONTINUE WITH THE TASK HURRY UP TO SUBMIT YOUR PROOF!!.
+        OPEN THE YOUTUBE CHANNEL BELOW AND CONTINUE WITH THE TASK. FOLLOW THE INSTRUCTIONS AND SUBMIT YOUR PROOF.
       </div>
     </div>
 
@@ -274,7 +280,7 @@ h2 {
       <h3>TAP YOUTUBE LINK</h3>
       <a href="#" id="target" class="youtube-btn"
          target="_blank" rel="noopener noreferrer">
-        Open YouTube Channel 
+        Open YouTube Channel
       </a>
     </div>
 
