@@ -1,10 +1,7 @@
-
 const taskNote = `CLICK NEXT AND WATCH THE YOUTUBE VIDEO FOR 20-MINUTES VIDEO!
-
 PLEASE SCREEN RECORD YOUR SCREEN TO PROOF U FINISHED THE TASK 
 ONCE DONE SUBMIT YOUR PROOF FOR REVIEW 
 Thank you for participating! We hope you enjoy the task. ❤️
-
 const channels = [
   "https://www.youtube.com/@kenyanationaltv",
   "https://www.youtube.com/@EPICGRAMke002",
