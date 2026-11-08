@@ -93,42 +93,144 @@ function renderTasks() {
     taskContainer.appendChild(card);
   });
 }
-
 // TASK DETAILS
-
 function initTask() {
   const taskName = document.getElementById("taskName");
   if (!taskName) return;
-
-  const params = new URLSearchParams(window.location.search);
-  const taskId = Number(params.get("id"));
-  const task = tasks.find(item => item.id === taskId);
-
-  if (!task) {
-    taskName.textContent = "Task not found";
-    return;
-  }
 
   const reward = document.getElementById("reward");
   const instructions = document.getElementById("instructions");
   const target = document.getElementById("target");
   const timer = document.getElementById("timer");
   const proof = document.getElementById("proof");
-  const submitButton = document.getElementById("submitTask");
+  const submitTask = document.getElementById("submitTask");
   const taskMsg = document.getElementById("taskMsg");
 
-  taskName.textContent = task.name;
+  const params = new URLSearchParams(window.location.search);
+  const taskId = Number(params.get("id"));
 
-  if (reward) reward.textContent = `KSh ${task.reward}`;
-  if (instructions) instructions.textContent = task.instructions;
+  const task = tasks.find(item => item.id === taskId);
 
-  if (target) {
-    target.href = task.url;
-    target.target = "_blank";
-    target.rel = "noopener noreferrer";
+  if (!task) {
+    taskName.textContent = "Task Not Found";
+    taskMsg.textContent = "This task does not exist.";
+    submitTask.disabled = true;
+    return;
   }
 
-  // 1-SECOND TIMER
+  taskName.textContent = task.name;
+  reward.textContent = `KSh ${task.reward}`;
+  target.href = task.url;
+
+  instructions.textContent =
+    "OPEN THE YOUTUBE VIDEO BELOW.\n" +
+    "COMPLETE THE REQUIRED TASK.\n" +
+    "RECORD YOUR SCREEN WHILE COMPLETING THE TASK.\n" +
+    "UPLOAD YOUR RECORDING AS PROOF FOR REVIEW.";
+
+  const duration = 1000;
+  const timerKey = `earnlink_timer_${task.id}`;
+
+  let startTime = Number(sessionStorage.getItem(timerKey));
+
+  if (!startTime) {
+    startTime = Date.now();
+    sessionStorage.setItem(timerKey, String(startTime));
+  }
+
+  let timerInterval;
+  let completed = false;
+
+  function updateTimer() {
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, duration - elapsed);
+
+    if (timer) {
+      timer.textContent = remaining > 0
+        ? `Please wait ${Math.ceil(remaining / 1000)} seconds`
+        : "You can now submit your task.";
+    }
+
+    if (remaining <= 0) {
+      submitTask.disabled = false;
+      clearInterval(timerInterval);
+    }
+  }
+
+  updateTimer();
+  timerInterval = setInterval(updateTimer, 250);
+
+  proof.addEventListener("change", function () {
+    if (proof.files && proof.files.length > 0) {
+      taskMsg.textContent = `Selected: ${proof.files[0].name}`;
+    } else {
+      taskMsg.textContent = "Please select your screen recording.";
+    }
+  });
+
+  submitTask.addEventListener("click", function (event) {
+    event.preventDefault();
+
+    if (completed) return;
+
+    if (Date.now() - startTime < duration) {
+      taskMsg.textContent = "Please wait before submitting.";
+      return;
+    }
+
+    if (!proof.files || proof.files.length === 0) {
+      taskMsg.textContent = "Please upload your screen recording first.";
+      return;
+    }
+
+    const user = JSON.parse(localStorage.getItem("earnlinkUser") || "null");
+
+    if (!user) {
+      taskMsg.textContent = "Please log in before submitting.";
+      return;
+    }
+
+    try {
+      const submissions = JSON.parse(
+        localStorage.getItem("earnlinkSubmissions") || "[]"
+      );
+
+      submissions.push({
+        taskId: task.id,
+        taskName: task.name,
+        reward: task.reward,
+        userEmail: user.email,
+        proofFileName: proof.files[0].name,
+        submittedAt: new Date().toISOString(),
+        status: "Pending review"
+      });
+
+      localStorage.setItem(
+        "earnlinkSubmissions",
+        JSON.stringify(submissions)
+      );
+
+      completed = true;
+      submitTask.disabled = true;
+      clearInterval(timerInterval);
+      sessionStorage.removeItem(timerKey);
+
+      taskMsg.textContent =
+        "Your proof has been submitted successfully. Redirecting to your wallet...";
+
+      setTimeout(function () {
+        window.location.href = "wallet.html";
+      }, 1000);
+
+    } catch (error) {
+      taskMsg.textContent =
+        "Submission failed. Please try again.";
+      console.error("EarnLink submission error:", error);
+    }
+  });
+}
+
+ // 1-SECOND TIMER
 
   const duration = 1000;
   const timerKey = `earnlink_timer_${task.id}`;
