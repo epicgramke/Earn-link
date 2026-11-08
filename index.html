@@ -1,114 +1,56 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#050505">
-<title>EARNLINK | Dashboard</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050505">
+  <title>EARNLINK | Dashboard</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<!-- TOP BRAND -->
-<header class="topbar">
-  <a class="brand" href="index.html">EARN<span>LINK</span></a>
-</header>
+  <!-- TOP: EARNLINK BRAND ONLY -->
+  <header class="topbar">
+    <a class="brand" href="index.html">EARN<span>LINK</span></a>
+  </header>
 
-<main class="container">
+  <main class="container">
 
-  <!-- WELCOME SECTION -->
-  <section class="hero">
-    <div>
-      <p class="eyebrow">WELCOME BACK</p>
-      <h1>Earn more. <span>Do more.</span></h1>
-      <p>Complete verified tasks and build your earnings.</p>
-    </div>
-    <a class="btn" href="tasks.html">View Tasks →</a>
-  </section>
-
-  <!-- ACCOUNT STATISTICS -->
-  <section class="balance-grid">
-
-    <div class="balance-card">
-      <div class="stat-icon">▣</div>
-      <small>AVAILABLE BALANCE</small>
-      <strong>KSh <span id="available">0.00</span></strong>
-      <a href="wallet.html">Withdraw →</a>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">◷</div>
-      <small>PENDING</small>
-      <strong>KSh <span id="pending">0.00</span></strong>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">🏆</div>
-      <small>TOTAL EARNED</small>
-      <strong>KSh <span id="total">0.00</span></strong>
-    </div>
-
-    <div class="stat">
-      <div class="stat-icon">✓</div>
-      <small>COMPLETED TASKS</small>
-      <strong id="completed">0</strong>
-    </div>
-
-  </section>
-
-  <!-- DASHBOARD INFORMATION -->
-  <section class="dashboard-grid">
-
-    <div class="panel">
-      <h2>How EarnLink works</h2>
-
-      <div class="steps">
-        <div><b>01</b><span>Choose a task</span></div>
-        <div><b>02</b><span>Complete it with the required proof</span></div>
-        <div><b>03</b><span>Submit for verification</span></div>
-        <div><b>04</b><span>Get approved earnings</span></div>
+    <!-- WELCOME HERO -->
+    <section class="hero">
+      <div>
+        <p class="eyebrow">WELCOME BACK</p>
+        <h1>Earn more. <span>Do more.</span></h1>
+        <p>Complete verified tasks and build your earnings.</p>
       </div>
-    </div>
+      <a class="btn" href="tasks.html">View Tasks →</a>
+    </section>
 
-    <div class="panel quick">
-      <h2>Quick actions</h2>
+    <!-- BOTTOM NAVIGATION -->
+    <nav class="bottom-navigation" aria-label="Main navigation">
+      <a class="active" href="index.html">
+        <span class="nav-icon">⌂</span>
+        <small>Home</small>
+      </a>
 
-      <a href="tasks.html">⚡ Browse available tasks <span>›</span></a>
-      <a href="verification.html">🛡 Check verification <span>›</span></a>
-      <a href="wallet.html">▣ Open wallet <span>›</span></a>
-    </div>
+      <a href="tasks.html">
+        <span class="nav-icon">▦</span>
+        <small>Tasks</small>
+      </a>
 
-  </section>
+      <a href="verification.html">
+        <span class="nav-icon">✓</span>
+        <small>Verification</small>
+      </a>
 
-  <!-- BOTTOM NAVIGATION -->
-  <nav class="bottom-navigation">
+      <a href="wallet.html">
+        <span class="nav-icon">▣</span>
+        <small>Wallet</small>
+      </a>
+    </nav>
 
-    <a class="active" href="index.html">
-      <span class="nav-icon">⌂</span>
-      <small>Home</small>
-    </a>
+  </main>
 
-    <a href="tasks.html">
-      <span class="nav-icon">▦</span>
-      <small>Tasks</small>
-    </a>
-
-    <a href="verification.html">
-      <span class="nav-icon">♢</span>
-      <small>Verification</small>
-    </a>
-
-    <a href="wallet.html">
-      <span class="nav-icon">▣</span>
-      <small>Wallet</small>
-    </a>
-
-  </nav>
-
-</main>
-
-<script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>
