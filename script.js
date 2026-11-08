@@ -1,6 +1,4 @@
-
 const taskNote = `PLEASE SCREEN RECORD YOUR SCREEN TO SHOW YOUR COMPLETION ONCE DONE SUBMIT YOUR PROOF FOR REVIEW.`;
-
 const channels = [
   "https://www.youtube.com/@kenyanationaltv",
   "https://www.youtube.com/@EPICGRAMke002",
