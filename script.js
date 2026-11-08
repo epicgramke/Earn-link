@@ -1,40 +1,35 @@
-
 const tasks = [
   {
     id: 1,
     name: "Campus Link KE Task #01",
     platform: "YouTube",
     reward: 50,
-    username: "Campus Link KE",
     url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Search YouTube for Campus Link KE. Review the channel, its videos, titles and thumbnails. Prepare a short research report."
+    instructions: "Search for Campus Link KE on YouTube. Review its channel and prepare a short content research report."
   },
   {
     id: 2,
     name: "Campus Link KE Task #02",
     platform: "YouTube",
     reward: 50,
-    username: "Campus Link KE",
     url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Find Campus Link KE on YouTube. Review its content and identify the main topics covered."
+    instructions: "Review Campus Link KE videos, titles and thumbnails. Prepare your findings."
   },
   {
     id: 3,
     name: "Campus Link KE Task #03",
     platform: "YouTube",
     reward: 75,
-    username: "Campus Link KE",
     url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Search for Campus Link KE. Analyse its video presentation, titles and content style. Prepare your findings."
+    instructions: "Analyse the content style and presentation of Campus Link KE."
   },
   {
     id: 4,
     name: "Campus Link KE Task #04",
     platform: "YouTube",
     reward: 75,
-    username: "Campus Link KE",
     url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Review Campus Link KE videos and prepare a short report about the content."
+    instructions: "Review Campus Link KE content and prepare a short research report."
   }
 ];
 
@@ -102,7 +97,7 @@ function renderTasks() {
     <article class="task-card">
       <p class="eyebrow">${t.platform}</p>
       <h2>${t.name}</h2>
-      <p class="meta">Campus Link KE • Channel research • Proof required</p>
+      <p class="meta">Campus Link KE • Research task</p>
       <div class="reward">KSh ${t.reward}</div>
       <a class="btn full" href="task.html?id=${t.id}">
         Start Task →
@@ -125,7 +120,6 @@ function initTask() {
   const timer = document.getElementById("timer");
   const submitButton = document.getElementById("submitTask");
   const taskMsg = document.getElementById("taskMsg");
-  const startButton = document.getElementById("startTimer");
 
   box.textContent = task.name;
 
@@ -139,59 +133,49 @@ function initTask() {
     target.textContent = "Search Campus Link KE on YouTube →";
   }
 
-  let seconds = 3600;
-  let interval = null;
-  let started = false;
+  // Automatically start the one-hour timer.
+  const startTime = Date.now();
+  const endTime = startTime + 3600000;
+
+  let completed = false;
 
   function updateTimer() {
-    const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
-    const remainingSeconds = seconds % 60;
+    const remaining = Math.max(0, Math.ceil((endTime - Date.now()) / 1000));
+
+    const hours = Math.floor(remaining / 3600);
+    const minutes = Math.floor((remaining % 3600) / 60);
+    const seconds = remaining % 60;
 
     if (timer) {
-      timer.textContent = [hours, minutes, remainingSeconds]
+      timer.textContent = [hours, minutes, seconds]
         .map(value => String(value).padStart(2, "0"))
         .join(":");
+    }
+
+    if (remaining === 0 && !completed) {
+      completed = true;
+      clearInterval(interval);
+
+      if (taskMsg) {
+        taskMsg.textContent =
+          "One-hour timer completed. You can now submit your proof.";
+      }
     }
   }
 
   updateTimer();
-
-  if (startButton) {
-    startButton.onclick = () => {
-      if (started) return;
-
-      started = true;
-      startButton.disabled = true;
-      startButton.textContent = "Timer Running";
-
-      interval = setInterval(() => {
-        if (seconds > 0) {
-          seconds--;
-          updateTimer();
-        } else {
-          clearInterval(interval);
-
-          if (taskMsg) {
-            taskMsg.textContent =
-              "Research time completed. You can now submit your proof.";
-          }
-        }
-      }, 1000);
-    };
-  }
+  const interval = setInterval(updateTimer, 1000);
 
   if (submitButton) {
     submitButton.onclick = () => {
-      const proof = document.getElementById("proof");
-
-      if (seconds > 0) {
+      if (!completed) {
         if (taskMsg) {
-          taskMsg.textContent =
-            "Please complete the one-hour research timer first.";
+          taskMsg.textContent = "Please wait until the one-hour timer finishes.";
         }
         return;
       }
+
+      const proof = document.getElementById("proof");
 
       if (!proof || !proof.files || !proof.files[0]) {
         if (taskMsg) {
@@ -224,7 +208,7 @@ function initTask() {
       }
 
       submitButton.disabled = true;
-      if (interval) clearInterval(interval);
+      clearInterval(interval);
     };
   }
 }
