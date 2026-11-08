@@ -1,4 +1,9 @@
 
+/* ==================================
+   EARNLINK PREMIUM DESIGN
+   BLACK & GOLD EDITION
+================================== */
+
 * {
   box-sizing: border-box;
 }
@@ -24,6 +29,7 @@ a {
 }
 
 /* TOP BAR */
+
 .topbar {
   min-height: 85px;
   border-bottom: 1px solid #242424;
@@ -48,10 +54,11 @@ h1 span {
 }
 
 /* PAGE LAYOUT */
+
 .container {
   width: min(1100px, 92%);
   margin: 40px auto;
-  padding-bottom: 120px;
+  padding-bottom: 130px;
 }
 
 .narrow {
@@ -59,12 +66,17 @@ h1 span {
 }
 
 /* DASHBOARD HERO */
+
 .hero {
   padding: 45px 38px;
   border: 1px solid #292929;
   border-radius: 25px;
   background:
-    radial-gradient(ellipse at 100% 100%, rgba(255,229,0,.08), transparent 42%),
+    radial-gradient(
+      ellipse at 100% 100%,
+      rgba(255,229,0,.08),
+      transparent 42%
+    ),
     linear-gradient(120deg, #111, #080808);
   display: flex;
   justify-content: space-between;
@@ -91,6 +103,8 @@ h1 span {
   color: var(--muted);
 }
 
+/* BUTTONS */
+
 .btn {
   display: inline-block;
   background: var(--gold);
@@ -100,10 +114,12 @@ h1 span {
   padding: 17px 24px;
   font-weight: 900;
   cursor: pointer;
+  transition: .25s;
 }
 
 .btn:hover {
   background: #fff04d;
+  transform: translateY(-2px);
 }
 
 .full {
@@ -112,6 +128,7 @@ h1 span {
 }
 
 /* BALANCE AND STAT CARDS */
+
 .balance-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -130,6 +147,13 @@ h1 span {
 
 .balance-card {
   border-color: #665d00;
+  background:
+    radial-gradient(
+      circle at top right,
+      rgba(255,229,0,.09),
+      transparent 60%
+    ),
+    #0b0b0b;
 }
 
 .balance-card small,
@@ -159,6 +183,7 @@ h1 span {
 }
 
 /* DASHBOARD CONTENT */
+
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1.5fr 1fr;
@@ -199,63 +224,88 @@ h1 span {
   color: var(--gold);
 }
 
-/* FIXED BOTTOM NAVIGATION */
+/* ==================================
+   FLOATING LUXURY BOTTOM NAVIGATION
+================================== */
+
 .bottom-navigation {
   position: fixed;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  bottom: calc(14px + env(safe-area-inset-bottom));
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: min(420px, calc(100% - 28px));
+  min-height: 76px;
+
   display: flex;
   justify-content: space-around;
   align-items: center;
+
   margin: 0;
-  padding: 12px 5px;
-  padding-bottom: calc(12px + env(safe-area-inset-bottom));
-  background: #080808;
-  border: 2px solid var(--gold);
-  border-bottom: none;
-  border-radius: 22px 22px 0 0;
-  box-shadow: 0 -5px 20px rgba(255,229,0,.15);
+  padding: 10px 8px;
+
+  background: rgba(15, 15, 15, 0.97);
+  border: 1px solid rgba(255, 229, 0, 0.35);
+  border-radius: 28px;
+
+  box-shadow:
+    0 8px 30px rgba(0, 0, 0, 0.65),
+    0 0 18px rgba(255, 229, 0, 0.12);
+
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+
   z-index: 1000;
 }
 
 .bottom-navigation a {
   flex: 1;
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 7px;
-  color: #eee;
+
+  gap: 5px;
   padding: 8px 2px;
-  border-right: 1px solid #665d00;
+
+  color: #888;
+  border: none;
+  border-radius: 18px;
+
+  transition: all 0.25s ease;
 }
 
-.bottom-navigation a:last-child {
-  border-right: none;
+.bottom-navigation a.active {
+  color: var(--gold);
+  background: rgba(255, 229, 0, 0.09);
 }
 
-.bottom-navigation a.active,
 .bottom-navigation a:hover {
   color: var(--gold);
+  transform: translateY(-2px);
 }
 
 .nav-icon {
-  font-size: 28px;
+  font-size: 25px;
   font-weight: bold;
+  line-height: 1;
 }
 
 .bottom-navigation small {
-  font-size: 13px;
-  font-weight: bold;
+  font-size: 11px;
+  font-weight: 700;
 }
 
 /* PAGE HEADINGS */
+
 .page-title {
   margin-bottom: 25px;
 }
 
 /* TASK LIST */
+
 .task-list {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -267,6 +317,12 @@ h1 span {
   border-radius: 16px;
   padding: 22px;
   background: var(--card);
+  transition: .25s;
+}
+
+.task-card:hover {
+  border-color: #665d00;
+  transform: translateY(-3px);
 }
 
 .task-card h2 {
@@ -300,6 +356,7 @@ h1 span {
 }
 
 /* RECORDS AND SUBMISSIONS */
+
 .record {
   margin-top: 25px;
   border-top: 1px solid var(--border);
@@ -320,6 +377,7 @@ h1 span {
 }
 
 /* FORM FIELDS */
+
 input {
   width: 100%;
   padding: 14px;
@@ -341,6 +399,7 @@ input:focus {
 }
 
 /* LOGIN / AUTHENTICATION */
+
 .auth-body {
   min-height: 100vh;
   display: grid;
@@ -381,6 +440,7 @@ input:focus {
 }
 
 /* TABLET */
+
 @media (max-width: 800px) {
   .dashboard-grid,
   .task-list {
@@ -397,6 +457,7 @@ input:focus {
 }
 
 /* MOBILE */
+
 @media (max-width: 450px) {
   .topbar {
     min-height: 78px;
@@ -409,7 +470,7 @@ input:focus {
 
   .container {
     margin: 25px auto;
-    padding-bottom: 120px;
+    padding-bottom: 130px;
   }
 
   .hero {
@@ -432,17 +493,18 @@ input:focus {
   }
 
   .bottom-navigation {
-    margin: 0;
-    padding: 12px 2px;
-    padding-bottom: calc(12px + env(safe-area-inset-bottom));
-  }
-
-  .bottom-navigation small {
-    font-size: 11px;
+    width: calc(100% - 24px);
+    min-height: 70px;
+    padding: 8px 5px;
+    border-radius: 24px;
   }
 
   .nav-icon {
-    font-size: 24px;
+    font-size: 23px;
+  }
+
+  .bottom-navigation small {
+    font-size: 10px;
   }
 
   .submission {
