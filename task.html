@@ -3,275 +3,23 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <meta
-    name="theme-color"
-    content="#050505"
-  >
-
-  <title>EarnLink | Task Details</title>
-
-  <style>
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: Arial, sans-serif;
-      background: #000;
-      color: #fff;
-      min-height: 100vh;
-    }
-
-    header {
-      background: #080808;
-      border-bottom: 1px solid #b8860b;
-      padding: 18px 20px;
-
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .logo {
-      font-size: 24px;
-      font-weight: 800;
-      color: #facc15;
-    }
-
-    .logout {
-      color: white;
-      text-decoration: none;
-      background: #252525;
-      padding: 10px 15px;
-      border-radius: 8px;
-      font-size: 13px;
-    }
-
-    .container {
-      max-width: 550px;
-      margin: 30px auto;
-      padding: 15px;
-    }
-
-    .back {
-      display: inline-block;
-      margin-bottom: 18px;
-      color: #facc15;
-      text-decoration: none;
-      font-size: 14px;
-    }
-
-    .card {
-      background: #111;
-      padding: 24px;
-      border: 1px solid #806000;
-      border-radius: 16px;
-      box-shadow: 0 5px 25px rgba(0,0,0,.5);
-    }
-
-    .tag {
-      display: inline-block;
-      background: #332800;
-      color: #facc15;
-      padding: 7px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: bold;
-    }
-
-    h2 {
-      margin-top: 16px;
-      font-size: 25px;
-      color: white;
-    }
-
-    .subtitle {
-      color: #999;
-      margin-top: 7px;
-      font-size: 14px;
-      line-height: 1.5;
-    }
-
-    .reward-box {
-      margin-top: 22px;
-      background: #211a00;
-      border: 1px solid #b8860b;
-      padding: 17px;
-      border-radius: 12px;
-
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .reward-box span,
-    .reward-box strong {
-      color: #facc15;
-    }
-
-    .reward-box span {
-      font-size: 14px;
-    }
-
-    .reward-box strong {
-      font-size: 25px;
-    }
-
-    .section {
-      margin-top: 25px;
-    }
-
-    .section h3 {
-      font-size: 16px;
-      margin-bottom: 12px;
-      color: #facc15;
-    }
-
-    .instructions {
-      background: #1a1a1a;
-      border: 1px solid #444;
-      padding: 16px;
-      border-radius: 10px;
-      color: #ddd;
-      font-size: 14px;
-      line-height: 1.7;
-      white-space: pre-line;
-    }
-
-    .youtube-btn {
-      display: block;
-      margin-top: 14px;
-      padding: 15px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #facc15,
-          #b8860b
-        );
-
-      color: #000;
-      text-align: center;
-      text-decoration: none;
-      border-radius: 9px;
-      font-weight: bold;
-    }
-
-    .youtube-btn:hover {
-      background: #eab308;
-    }
-
-    /* TIMER */
-
-    .timer-box {
-      background: #1a1a1a;
-      border: 1px solid #444;
-      padding: 20px;
-      border-radius: 12px;
-      text-align: center;
-    }
-
-    #timer {
-      font-size: 32px;
-      font-weight: bold;
-      color: #facc15;
-    }
-
-    /* UPLOAD */
-
-    .upload-box {
-      border: 2px dashed #b8860b;
-      padding: 22px;
-      text-align: center;
-      border-radius: 12px;
-      background: #191919;
-      color: white;
-    }
-
-    .upload-box input {
-      width: 100%;
-      margin-top: 15px;
-      color: white;
-    }
-
-    #taskMsg {
-      font-size: 13px;
-      color: #aaa;
-      margin-top: 12px;
-      line-height: 1.5;
-    }
-
-    /* SUBMIT */
-
-    .submit-btn {
-      width: 100%;
-      margin-top: 22px;
-      padding: 16px;
-
-      border: none;
-      border-radius: 9px;
-
-      background:
-        linear-gradient(
-          135deg,
-          #facc15,
-          #b8860b
-        );
-
-      color: #000;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-
-    .submit-btn:hover:not(:disabled) {
-      background: #eab308;
-    }
-
-    .submit-btn:disabled {
-      background: #333;
-      color: #888;
-      cursor: not-allowed;
-    }
-
-    .footer {
-      text-align: center;
-      color: #666;
-      font-size: 12px;
-      padding: 25px;
-    }
-
-    @media(max-width: 480px) {
-
-      .container {
-        margin: 15px auto;
-      }
-
-      .card {
-        padding: 19px;
-      }
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050505">
+  <title>EarnLink | Tasks</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-  <header>
+  <header class="topbar">
 
-    <div class="logo">
-      EARN LINK
-    </div>
+    <a class="brand" href="index.html">
+      EARN<span>LINK</span>
+    </a>
 
     <a
+      class="logout-link"
       href="#"
-      class="logout"
       onclick="logout(); return false;"
     >
       Logout
@@ -280,172 +28,60 @@
   </header>
 
 
-  <div class="container">
+  <main class="container">
 
-    <a
-      href="tasks.html"
-      class="back"
-    >
-      ← Back to Tasks
-    </a>
+    <section class="page-title">
 
-
-    <div class="card">
-
-      <span class="tag">
-        YOUTUBE CONTENT REVIEW
-      </span>
-
-
-      <h2 id="taskName">
-        Loading Task...
-      </h2>
-
-
-      <p class="subtitle">
-        Review the assigned YouTube content
-        and submit your evidence for review.
+      <p class="eyebrow">
+        AVAILABLE WORK
       </p>
 
+      <h1>
+        YouTube Tasks
+      </h1>
 
-      <!-- REWARD -->
+      <p>
+        Review assigned YouTube content and submit your proof.
+      </p>
 
-      <div class="reward-box">
+    </section>
 
-        <span>
-          Task Reward
-        </span>
 
-        <strong id="reward">
-          KSh 10
-        </strong>
+    <section
+      id="taskList"
+      class="task-list"
+    >
 
+      <div class="loading">
+        Loading tasks...
       </div>
 
-
-      <!-- INSTRUCTIONS -->
-
-      <div class="section">
-
-        <h3>
-          TASK INSTRUCTIONS
-        </h3>
-
-        <div
-          class="instructions"
-          id="instructions"
-        >
-          OPEN THE YOUTUBE CHANNEL BELOW.
-          REVIEW THE ASSIGNED CONTENT.
-          RECORD YOUR SCREEN WHILE COMPLETING THE REVIEW.
-          UPLOAD YOUR RECORDING AS PROOF FOR REVIEW.
-        </div>
-
-      </div>
+    </section>
 
 
-      <!-- YOUTUBE -->
+    <nav class="bottom-navigation" aria-label="Main navigation">
 
-      <div class="section">
+      <a href="index.html">
+        <span class="nav-icon">⌂</span>
+        <small>Home</small>
+      </a>
 
-        <h3>
-          OPEN YOUTUBE
-        </h3>
+      <a class="active" href="tasks.html">
+        <span class="nav-icon">▦</span>
+        <small>Tasks</small>
+      </a>
 
-        <a
-          href="#"
-          id="target"
-          class="youtube-btn"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Open YouTube Channel
-        </a>
+      <a href="wallet.html">
+        <span class="nav-icon">▣</span>
+        <small>Wallet</small>
+      </a>
 
-      </div>
+    </nav>
 
-
-      <!-- TIMER -->
-
-      <div class="section">
-
-        <h3>
-          TASK TIMER
-        </h3>
-
-        <div class="timer-box">
-
-          <div id="timer">
-            10s
-          </div>
-
-          <p class="subtitle">
-            Please complete the content review
-            before submitting your proof.
-          </p>
-
-        </div>
-
-      </div>
-
-
-      <!-- PROOF -->
-
-      <div class="section">
-
-        <h3>
-          SUBMIT YOUR PROOF
-        </h3>
-
-        <div class="upload-box">
-
-          <p>
-            📹 Upload Your Screen Recording
-          </p>
-
-          <p class="subtitle">
-            Select your recording from your device.
-          </p>
-
-          <input
-            type="file"
-            id="proof"
-            accept="video/*"
-          >
-
-        </div>
-
-
-        <p id="taskMsg">
-          Complete the review and select
-          your screen recording.
-        </p>
-
-      </div>
-
-
-      <!-- SUBMIT -->
-
-      <button
-        id="submitTask"
-        class="submit-btn"
-        disabled
-      >
-        Submit for Review
-      </button>
-
-    </div>
-
-
-    <div class="footer">
-      © 2026 EarnLink. All rights reserved.
-    </div>
-
-  </div>
+  </main>
 
 
   <script src="script.js"></script>
 
 </body>
-
 </html>
