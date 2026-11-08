@@ -2,39 +2,39 @@
 const tasks = [
   {
     id: 1,
-    name: "YouTube Channel Research #01",
+    name: "Campus Link KE Task #01",
     platform: "YouTube",
     reward: 50,
-    username: "Enter YouTube username",
-    url: "https://www.youtube.com/results?search_query=YouTube+channels",
-    instructions: "Search for the supplied YouTube username. Review 10 relevant channels. Record their names and the type of content they publish. Choose one video and analyse its content."
+    username: "Campus Link KE",
+    url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
+    instructions: "Search YouTube for Campus Link KE. Review the channel, its videos, titles and thumbnails. Prepare a short research report."
   },
   {
     id: 2,
-    name: "YouTube Channel Research #02",
+    name: "Campus Link KE Task #02",
     platform: "YouTube",
     reward: 50,
-    username: "Enter YouTube username",
-    url: "https://www.youtube.com/results?search_query=YouTube+channel+research",
-    instructions: "Research 10 YouTube channels. Compare their video titles, thumbnails and content topics. Write a short report about what makes their content different."
+    username: "Campus Link KE",
+    url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
+    instructions: "Find Campus Link KE on YouTube. Review its content and identify the main topics covered."
   },
   {
     id: 3,
-    name: "YouTube Content Analysis #03",
+    name: "Campus Link KE Task #03",
     platform: "YouTube",
     reward: 75,
-    username: "Enter YouTube username",
-    url: "https://www.youtube.com/results?search_query=YouTube+content+analysis",
-    instructions: "Review 10 channels and analyse their content styles. Watch a relevant video and write down its main points."
+    username: "Campus Link KE",
+    url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
+    instructions: "Search for Campus Link KE. Analyse its video presentation, titles and content style. Prepare your findings."
   },
   {
     id: 4,
-    name: "YouTube Content Analysis #04",
+    name: "Campus Link KE Task #04",
     platform: "YouTube",
     reward: 75,
-    username: "Enter YouTube username",
-    url: "https://www.youtube.com/results?search_query=YouTube+video+research",
-    instructions: "Research 10 channels, compare their video presentation and prepare a brief content research report."
+    username: "Campus Link KE",
+    url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
+    instructions: "Review Campus Link KE videos and prepare a short report about the content."
   }
 ];
 
@@ -102,7 +102,7 @@ function renderTasks() {
     <article class="task-card">
       <p class="eyebrow">${t.platform}</p>
       <h2>${t.name}</h2>
-      <p class="meta">Channel research • 10 channels • Proof required</p>
+      <p class="meta">Campus Link KE • Channel research • Proof required</p>
       <div class="reward">KSh ${t.reward}</div>
       <a class="btn full" href="task.html?id=${t.id}">
         Start Task →
@@ -125,6 +125,7 @@ function initTask() {
   const timer = document.getElementById("timer");
   const submitButton = document.getElementById("submitTask");
   const taskMsg = document.getElementById("taskMsg");
+  const startButton = document.getElementById("startTimer");
 
   box.textContent = task.name;
 
@@ -135,7 +136,7 @@ function initTask() {
     target.href = task.url;
     target.target = "_blank";
     target.rel = "noopener noreferrer";
-    target.textContent = "Search on YouTube →";
+    target.textContent = "Search Campus Link KE on YouTube →";
   }
 
   let seconds = 3600;
@@ -156,8 +157,6 @@ function initTask() {
 
   updateTimer();
 
-  const startButton = document.getElementById("startTimer");
-
   if (startButton) {
     startButton.onclick = () => {
       if (started) return;
@@ -172,6 +171,7 @@ function initTask() {
           updateTimer();
         } else {
           clearInterval(interval);
+
           if (taskMsg) {
             taskMsg.textContent =
               "Research time completed. You can now submit your proof.";
