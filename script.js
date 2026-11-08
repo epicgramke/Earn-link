@@ -3,8 +3,7 @@ const taskNote = `CLICK NEXT AND COMPLETE THE 20-MINUTE YOUTUBE CONTENT REVIEW!
 
 PLEASE SCREEN RECORD YOUR SCREEN TO SHOW YOUR COMPLETION.
 ONCE DONE, SUBMIT YOUR PROOF FOR REVIEW.
-
-Thank you for participating! We hope you enjoy the task. ❤️`;
+`;
 
 const channels = [
   "https://www.youtube.com/@kenyanationaltv",
