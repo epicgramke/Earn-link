@@ -1,6 +1,5 @@
 
-const taskNote = `PLEASE SCREEN RECORD YOUR SCREEN TO SHOW YOUR COMPLETION ONCE DONE SUBMIT YOUR PROOF FOR REVIEW.
-`;
+const taskNote = `PLEASE SCREEN RECORD YOUR SCREEN TO SHOW YOUR COMPLETION ONCE DONE SUBMIT YOUR PROOF FOR REVIEW.`;
 
 const channels = [
   "https://www.youtube.com/@kenyanationaltv",
@@ -24,9 +23,7 @@ const tasks = channels.map((url, index) => ({
   instructions: taskNote
 }));
 
-// -----------------------------
 // GENERAL FUNCTIONS
-// -----------------------------
 
 function logout() {
   localStorage.removeItem("earnlinkUser");
@@ -34,12 +31,10 @@ function logout() {
 }
 
 function initAuth() {
-  const user = localStorage.getItem("earnlinkUser");
-
   const loginForm = document.getElementById("loginForm");
 
   if (loginForm) {
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener("submit", function(event) {
       event.preventDefault();
 
       const email = document.getElementById("email")?.value.trim();
@@ -50,11 +45,7 @@ function initAuth() {
         return;
       }
 
-      localStorage.setItem(
-        "earnlinkUser",
-        JSON.stringify({ email })
-      );
-
+      localStorage.setItem("earnlinkUser", JSON.stringify({email}));
       window.location.href = "index.html";
     });
   }
@@ -62,7 +53,7 @@ function initAuth() {
   const registerForm = document.getElementById("registerForm");
 
   if (registerForm) {
-    registerForm.addEventListener("submit", function (event) {
+    registerForm.addEventListener("submit", function(event) {
       event.preventDefault();
 
       const email = document.getElementById("email")?.value.trim();
@@ -73,37 +64,29 @@ function initAuth() {
         return;
       }
 
-      localStorage.setItem(
-        "earnlinkUser",
-        JSON.stringify({ email })
-      );
-
+      localStorage.setItem("earnlinkUser", JSON.stringify({email}));
       window.location.href = "index.html";
     });
   }
 }
 
-// -----------------------------
 // TASK LIST
-// -----------------------------
 
 function renderTasks() {
   const taskContainer = document.getElementById("taskList");
-
   if (!taskContainer) return;
 
   taskContainer.innerHTML = "";
 
   tasks.forEach(task => {
     const card = document.createElement("div");
-
     card.className = "task-card";
 
     card.innerHTML = `
       <h3>${task.name}</h3>
       <p>${task.platform} Content Review</p>
       <p class="task-reward">Reward: KSh ${task.reward}</p>
-      <p>Duration: 20 minutes</p>
+      <p>Duration: 1 second</p>
       <a class="btn" href="task.html?id=${task.id}">
         Start Task
       </a>
@@ -113,18 +96,14 @@ function renderTasks() {
   });
 }
 
-// -----------------------------
-// TASK DETAILS AND TIMER
-// -----------------------------
+// TASK DETAILS
 
 function initTask() {
   const taskName = document.getElementById("taskName");
-
   if (!taskName) return;
 
   const params = new URLSearchParams(window.location.search);
   const taskId = Number(params.get("id"));
-
   const task = tasks.find(item => item.id === taskId);
 
   if (!task) {
@@ -142,13 +121,8 @@ function initTask() {
 
   taskName.textContent = task.name;
 
-  if (reward) {
-    reward.textContent = `KSh ${task.reward}`;
-  }
-
-  if (instructions) {
-    instructions.textContent = task.instructions;
-  }
+  if (reward) reward.textContent = `KSh ${task.reward}`;
+  if (instructions) instructions.textContent = task.instructions;
 
   if (target) {
     target.href = task.url;
@@ -156,71 +130,55 @@ function initTask() {
     target.rel = "noopener noreferrer";
   }
 
-// -----------------------------
-// 1-SECOND TIMER
-// -----------------------------
+  // 1-SECOND TIMER
 
-const duration = 1 * 1000;
-const timerKey = `earnlink_timer_${task.id}`;
+  const duration = 1000;
+  const timerKey = `earnlink_timer_${task.id}`;
 
-let startTime = sessionStorage.getItem(timerKey);
+  let startTime = sessionStorage.getItem(timerKey);
 
-if (!startTime) {
-  startTime = Date.now();
-  sessionStorage.setItem(timerKey, startTime);
-} else {
-  startTime = Number(startTime);
-}
-
-let timerInterval;
-
-function updateTimer() {
-  const elapsed = Date.now() - startTime;
-  const remaining = Math.max(0, duration - elapsed);
-
-  if (timer) {
-    timer.textContent = `${Math.ceil(remaining / 1000)}s`;
+  if (!startTime) {
+    startTime = Date.now();
+    sessionStorage.setItem(timerKey, startTime);
+  } else {
+    startTime = Number(startTime);
   }
 
-  if (remaining <= 0) {
-    clearInterval(timerInterval);
+  let timerInterval;
+
+  function updateTimer() {
+    const elapsed = Date.now() - startTime;
+    const remaining = Math.max(0, duration - elapsed);
 
     if (timer) {
-      timer.textContent = "Completed";
-    }
-if (taskMsg) {
-  taskMsg.textContent =
-    "Your submission has been recorded and is pending review.";
-}
-
-submitButton.disabled = true;
-clearInterval(timerInterval);
-
-// Redirect to wallet after submission
-setTimeout(() => {
-  window.location.href = "wallet.html";
-}, 1000);
+      timer.textContent = `${Math.ceil(remaining / 1000)}s`;
     }
 
-    if (submitButton) {
-      submitButton.disabled = false;
+    if (remaining <= 0) {
+      clearInterval(timerInterval);
+
+      if (timer) timer.textContent = "Completed";
+
+      if (taskMsg) {
+        taskMsg.textContent =
+          "Review completed. Upload your proof to submit.";
+      }
+
+      if (submitButton) {
+        submitButton.disabled = false;
+      }
     }
   }
-}
 
-if (submitButton) {
-  submitButton.disabled = true;
-}
+  if (submitButton) submitButton.disabled = true;
 
-updateTimer();
+  updateTimer();
+  timerInterval = setInterval(updateTimer, 100);
 
-timerInterval = setInterval(updateTimer, 100);
-  // -----------------------------
-  // PROOF FILE SELECTION
-  // -----------------------------
+  // PROOF SELECTION
 
   if (proof) {
-    proof.addEventListener("change", function () {
+    proof.addEventListener("change", function() {
       if (taskMsg) {
         taskMsg.textContent = proof.files.length
           ? `Selected: ${proof.files[0].name}`
@@ -229,26 +187,22 @@ timerInterval = setInterval(updateTimer, 100);
     });
   }
 
-  // -----------------------------
   // SUBMIT TASK
-  // -----------------------------
 
   if (submitButton) {
-    submitButton.addEventListener("click", function () {
+    submitButton.addEventListener("click", function() {
       const elapsed = Date.now() - startTime;
 
       if (elapsed < duration) {
         if (taskMsg) {
-          taskMsg.textContent =
-            "Please complete the 20-minute review period first.";
+          taskMsg.textContent = "Please wait for the timer to complete.";
         }
         return;
       }
 
       if (!proof || !proof.files || proof.files.length === 0) {
         if (taskMsg) {
-          taskMsg.textContent =
-            "Please select your screen recording proof.";
+          taskMsg.textContent = "Please select your screen recording proof.";
         }
         return;
       }
@@ -278,20 +232,24 @@ timerInterval = setInterval(updateTimer, 100);
 
       if (taskMsg) {
         taskMsg.textContent =
-          "Your submission has been recorded and is pending review.";
+          "Submission successful! Redirecting to wallet...";
       }
 
       submitButton.disabled = true;
       clearInterval(timerInterval);
+
+      // GO TO WALLET AFTER SUBMISSION
+
+      setTimeout(function() {
+        window.location.href = "wallet.html";
+      }, 1000);
     });
   }
 }
 
-// -----------------------------
 // INITIALIZE WEBSITE
-// -----------------------------
 
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function() {
   initAuth();
   renderTasks();
   initTask();
