@@ -1,14 +1,15 @@
 
 // =====================================
 // EARNLINK - MAIN SCRIPT
+// VERSION 2.0
 // =====================================
 
-const taskNote = `CLICK NEXT AND COMPLETE THE 30-SECOND YOUTUBE CONTENT REVIEW!
+const taskNote = `CLICK OPEN YOUTUBE AND COMPLETE THE 30 SECONDS CONTENT REVIEW!
 
 PLEASE SCREEN RECORD YOUR SCREEN TO SHOW YOUR COMPLETION.
-ONCE DONE, SUBMIT YOUR PROOF FOR REVIEW.
+ONCE DONE, SELECT YOUR MP4 PROOF VIDEO AND CLICK NEXT.
 
-Thank you for participating! We hope you enjoy the task. ❤️`;
+THANK YOU FOR PARTICIPATING! ❤️`;
 
 const channels = [
   "https://www.youtube.com/@kenyanationaltv",
@@ -32,6 +33,38 @@ const tasks = channels.map((url, index) => ({
   instructions: taskNote
 }));
 
+const TIMER_DURATION = 30 * 1000;
+
+// =====================================
+// STORAGE HELPERS
+// =====================================
+
+function getStoredJSON(key, fallback) {
+  try {
+    return JSON.parse(localStorage.getItem(key)) || fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function getCurrentUser() {
+  return getStoredJSON("earnlinkUser", {});
+}
+
+function getUserKey() {
+  return (getCurrentUser().email || "guest")
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "_");
+}
+
+function getTimerKey(taskId) {
+  return `earnlink_timer_v4_${getUserKey()}_${taskId}`;
+}
+
+function getSubmissions() {
+  return getStoredJSON("earnlinkSubmissions", []);
+}
+
 // =====================================
 // LOGOUT
 // =====================================
@@ -46,6 +79,7 @@ function logout() {
 // =====================================
 
 function initAuth() {
+
   const loginForm = document.getElementById("loginForm");
 
   if (loginForm) {
@@ -56,7 +90,7 @@ function initAuth() {
       const password = document.getElementById("password")?.value;
 
       if (!email || !password) {
-        alert("Please enter your email and password.");
+        alert("PLEASE ENTER YOUR EMAIL AND PASSWORD.");
         return;
       }
 
@@ -79,7 +113,7 @@ function initAuth() {
       const password = document.getElementById("password")?.value;
 
       if (!email || !password) {
-        alert("Please fill in all required fields.");
+        alert("PLEASE FILL IN ALL REQUIRED FIELDS.");
         return;
       }
 
@@ -98,6 +132,7 @@ function initAuth() {
 // =====================================
 
 function renderTasks() {
+
   const taskContainer = document.getElementById("taskList");
 
   if (!taskContainer) return;
@@ -105,6 +140,7 @@ function renderTasks() {
   taskContainer.innerHTML = "";
 
   tasks.forEach(task => {
+
     const card = document.createElement("div");
 
     card.className = "task-card";
@@ -112,10 +148,12 @@ function renderTasks() {
     card.innerHTML = `
       <h3>${task.name}</h3>
       <p>${task.platform} Content Review</p>
-      <p class="task-reward">Reward: KSh ${task.reward}</p>
-      <p>Duration: 30 seconds</p>
+      <p class="task-reward">
+        REWARD: KSh ${task.reward}
+      </p>
+      <p>DURATION: 30 SECONDS</p>
       <a class="btn" href="task.html?id=${task.id}">
-        NEXT →
+        START TASK →
       </a>
     `;
 
@@ -128,11 +166,13 @@ function renderTasks() {
 // =====================================
 
 function initTask() {
+
   const taskName = document.getElementById("taskName");
 
   if (!taskName) return;
 
   const params = new URLSearchParams(window.location.search);
+
   const taskId = Number(params.get("id"));
 
   const task = tasks.find(item => item.id === taskId);
@@ -160,54 +200,94 @@ function initTask() {
     instructions.textContent = task.instructions;
   }
 
+  // =====================================
+  // YOUTUBE LINK
+  // =====================================
+
+  const timerKey = getTimerKey(task.id);
+
+  let startTime = Number(localStorage.getItem(timerKey)) || 0;
+
   if (target) {
+
     target.href = task.url;
     target.target = "_blank";
     target.rel = "noopener noreferrer";
-    target.textContent = "NEXT →";
+    target.textContent = "OPEN YOUTUBE →";
+
+    target.addEventListener("click", function() {
+
+      // START TIMER ONLY ON FIRST YOUTUBE CLICK
+
+      if (!startTime) {
+        startTime = Date.now();
+
+        localStorage.setItem(timerKey, String(startTime));
+
+        updateTimer();
+      }
+
+    });
   }
 
   // =====================================
-  // 30-SECOND TIMER
+  // TIMER DISPLAY
   // =====================================
-
-  const duration = 30 * 1000;
-
-  // New key resets the previous timer
-  const timerKey = `earnlink_timer_v3_${task.id}`;
-
-  let startTime = sessionStorage.getItem(timerKey);
-
-  if (!startTime) {
-    startTime = Date.now();
-    sessionStorage.setItem(timerKey, startTime);
-  } else {
-    startTime = Number(startTime);
-  }
 
   if (timer) {
     timer.style.color = "red";
     timer.style.borderColor = "red";
+    timer.style.fontWeight = "bold";
   }
 
-  if (submitButton) {
-    submitButton.disabled = true;
+  let timerInterval = null;
+
+  let timerFinished = false;
+  let validProof = false;
+
+  function updateButton() {
+
+    if (submitButton) {
+      submitButton.disabled =
+        !(timerFinished && validProof);
+    }
   }
 
-  let timerInterval;
+  // =====================================
+  // 30-SECOND COUNTDOWN
+  // =====================================
 
   function updateTimer() {
+
+    if (!startTime) {
+
+      if (timer) {
+        timer.textContent = "00:30";
+      }
+
+      timerFinished = false;
+      updateButton();
+
+      return;
+    }
+
     const elapsed = Date.now() - startTime;
-    const remaining = Math.max(0, duration - elapsed);
+
+    const remaining = Math.max(
+      0,
+      TIMER_DURATION - elapsed
+    );
 
     const seconds = Math.ceil(remaining / 1000);
 
     if (timer) {
-      timer.textContent = `00:${String(seconds).padStart(2, "0")}`;
+      timer.textContent =
+        `00:${String(seconds).padStart(2, "0")}`;
     }
 
     if (remaining <= 0) {
-      clearInterval(timerInterval);
+
+      timerFinished = true;
 
       if (timer) {
         timer.textContent = "00:00";
@@ -215,30 +295,108 @@ function initTask() {
 
       if (taskMsg) {
         taskMsg.textContent =
-          "Review period completed. You can now submit your proof.";
+          "30-SECOND REVIEW COMPLETED. SELECT YOUR MP4 PROOF VIDEO.";
       }
 
-      if (submitButton) {
-        submitButton.disabled = false;
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
       }
     }
+
+    updateButton();
   }
 
-  updateTimer();
-  timerInterval = setInterval(updateTimer, 250);
+  if (startTime) {
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 250);
+  } else {
+    updateTimer();
+  }
 
   // =====================================
-  // PROOF FILE SELECTION
+  // MP4 PROOF SELECTION
   // =====================================
 
   if (proof) {
+
+    proof.setAttribute("accept", ".mp4,video/mp4");
+
     proof.addEventListener("change", function() {
-      if (taskMsg) {
-        taskMsg.textContent = proof.files.length
-          ? `Selected: ${proof.files[0].name}`
-          : "No proof selected.";
+
+      validProof = false;
+
+      const file = proof.files?.[0];
+
+      if (!file) {
+
+        if (taskMsg) {
+          taskMsg.textContent = "NO PROOF SELECTED.";
+        }
+
+        updateButton();
+        return;
       }
+
+      const isMP4 = file.name.toLowerCase().endsWith(".mp4");
+
+      if (!isMP4) {
+
+        alert("ONLY MP4 VIDEO FILES ARE ACCEPTED.");
+
+        proof.value = "";
+
+        if (taskMsg) {
+          taskMsg.textContent =
+            "PLEASE SELECT AN MP4 VIDEO.";
+        }
+
+        updateButton();
+        return;
+      }
+
+      validProof = true;
+
+      if (taskMsg) {
+        taskMsg.textContent =
+          `MP4 SELECTED: ${file.name}`;
+      }
+
+      updateButton();
+
+      if (!timerFinished && taskMsg) {
+        taskMsg.textContent +=
+          " WAITING FOR TIMER TO FINISH.";
+      }
+
     });
+  }
+
+  // =====================================
+  // PREVENT DUPLICATE SUBMISSIONS
+  // =====================================
+
+  const user = getCurrentUser();
+
+  const submissions = getSubmissions();
+
+  const alreadySubmitted = submissions.some(item =>
+    item.taskId === task.id &&
+    item.userEmail === (user.email || "Guest")
+  );
+
+  if (alreadySubmitted) {
+
+    if (taskMsg) {
+      taskMsg.textContent =
+        "YOU HAVE ALREADY SUBMITTED THIS TASK. STATUS: PENDING VERIFICATION.";
+    }
+
+    if (submitButton) {
+      submitButton.disabled = true;
+    }
+
+    return;
   }
 
   // =====================================
@@ -246,54 +404,113 @@ function initTask() {
   // =====================================
 
   if (submitButton) {
-    submitButton.addEventListener("click", function() {
-      const elapsed = Date.now() - startTime;
 
-      if (elapsed < duration) {
+    submitButton.disabled = true;
+    submitButton.textContent = "NEXT →";
+
+    submitButton.addEventListener("click", function() {
+
+      // CHECK TIMER
+
+      const elapsed = startTime
+        ? Date.now() - startTime
+        : 0;
+
+      if (elapsed < TIMER_DURATION) {
+
         if (taskMsg) {
           taskMsg.textContent =
-            "Please complete the review period first.";
+            "PLEASE COMPLETE THE 30-SECOND REVIEW FIRST.";
         }
+
         return;
       }
 
-      if (!proof || !proof.files || proof.files.length === 0) {
+      // CHECK MP4
+
+      const file = proof?.files?.[0];
+
+      if (!file || !file.name.toLowerCase().endsWith(".mp4")) {
+
         if (taskMsg) {
-          taskMsg.textContent = "Please select your proof file.";
+          taskMsg.textContent =
+            "PLEASE SELECT A VALID MP4 VIDEO.";
         }
+
         return;
       }
 
-      const user = JSON.parse(
-        localStorage.getItem("earnlinkUser") || "{}"
+      // CHECK DUPLICATES AGAIN
+
+      const currentSubmissions = getSubmissions();
+
+      const duplicate = currentSubmissions.some(item =>
+        item.taskId === task.id &&
+        item.userEmail === (user.email || "Guest")
       );
 
-      const submissions = JSON.parse(
-        localStorage.getItem("earnlinkSubmissions") || "[]"
-      );
+      if (duplicate) {
 
-      submissions.push({
+        if (taskMsg) {
+          taskMsg.textContent =
+            "THIS TASK HAS ALREADY BEEN SUBMITTED.";
+        }
+
+        submitButton.disabled = true;
+
+        return;
+      }
+
+      // RECORD SUBMISSION
+
+      const submission = {
+
         taskId: task.id,
+
         taskName: task.name,
+
+        platform: task.platform,
+
         reward: task.reward,
+
         userEmail: user.email || "Guest",
-        proofFileName: proof.files[0].name,
+
+        proofFileName: file.name,
+
         submittedAt: new Date().toISOString(),
-        status: "Pending review"
-      });
+
+        status: "Pending Verification"
+
+      };
+
+      currentSubmissions.push(submission);
 
       localStorage.setItem(
         "earnlinkSubmissions",
-        JSON.stringify(submissions)
+        JSON.stringify(currentSubmissions)
       );
+
+      // SUCCESS MESSAGE
 
       if (taskMsg) {
         taskMsg.textContent =
-          "Your submission has been recorded and is pending review.";
+          "SUCCESS! YOUR SUBMISSION HAS BEEN RECORDED. STATUS: PENDING VERIFICATION.";
       }
 
       submitButton.disabled = true;
-      clearInterval(timerInterval);
+
+      submitButton.textContent = "SUBMITTED ✓";
+
+      validProof = false;
+
+      if (proof) {
+        proof.disabled = true;
+      }
+
+      if (timerInterval) {
+        clearInterval(timerInterval);
+      }
+
     });
   }
 }
@@ -303,7 +520,11 @@ function initTask() {
 // =====================================
 
 document.addEventListener("DOMContentLoaded", function() {
+
   initAuth();
+
   renderTasks();
+
   initTask();
+
 });
