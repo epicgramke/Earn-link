@@ -1,41 +1,33 @@
-const tasks = [
-  {
-    id: 1,
-    name: "YOUTUBE 1",
-    platform: "YouTube",
-    reward: 10,
-    username: "Campus Link KE",
-    url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Search for Campus Link KE on YouTube. Review the channel, examine its videos, titles and thumbnails, and prepare a short research report."
-  },
-  {
-    id: 2,
-    name: "Campus Link KE Task #02",
-    platform: "YouTube",
-    reward: 50,
-    username: "Campus Link KE",
-    url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Review Campus Link KE videos, titles and thumbnails. Prepare your findings."
-  },
-  {
-    id: 3,
-    name: "Campus Link KE Task #03",
-    platform: "YouTube",
-    reward: 75,
-    username: "Campus Link KE",
-    url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Analyse the content style and presentation of Campus Link KE."
-  },
-  {
-    id: 4,
-    name: "Campus Link KE Task #04",
-    platform: "YouTube",
-    reward: 75,
-    username: "Campus Link KE",
-    url: "https://www.youtube.com/results?search_query=Campus+Link+KE",
-    instructions: "Review Campus Link KE content and prepare a short research report."
-  }
+
+const taskNote = `😍 CLICK NEXT AND COMPLETE THE 20-MINUTE VIDEO RESEARCH TASK!
+
+Please screen-record your research activity and upload the recording as proof of task completion.
+
+Once you're done, submit your proof for review.
+
+Thank you for participating! We hope you enjoy the task. ❤️`;
+
+const channels = [
+  "https://www.youtube.com/@kenyanationaltv",
+  "https://www.youtube.com/@EPICGRAMke002",
+  "https://www.youtube.com/@epicgramke3",
+  "https://www.youtube.com/@EPICGRAMKE001",
+  "https://www.youtube.com/@EPICGRAMART",
+  "https://www.youtube.com/@RANDOMWITHGRAM",
+  "https://www.youtube.com/@gramadvantures",
+  "https://www.youtube.com/@equitableparty",
+  "https://www.youtube.com/@IsaacMabeya-x8t",
+  "https://www.youtube.com/@TRACIEVLOGS"
 ];
+
+const tasks = channels.map((url, index) => ({
+  id: index + 1,
+  name: `YOUTUBE ${index + 1}`,
+  platform: "YouTube",
+  reward: 10,
+  url,
+  instructions: taskNote
+}));
 
 function logout() {
   localStorage.removeItem("earnlink_logged_in");
@@ -97,13 +89,13 @@ function renderTasks() {
   const box = document.getElementById("taskList");
   if (!box) return;
 
-  box.innerHTML = tasks.map(t => `
+  box.innerHTML = tasks.map(task => `
     <article class="task-card">
-      <p class="eyebrow">${t.platform}</p>
-      <h2>${t.name}</h2>
-      <p class="meta">Campus Link KE • Research task • Proof required</p>
-      <div class="reward">KSh ${t.reward}</div>
-      <a class="btn full" href="task.html?id=${t.id}">
+      <p class="eyebrow">YOUTUBE TASK</p>
+      <h2>${task.name}</h2>
+      <p class="meta">Channel research • 20 minutes • Proof required</p>
+      <div class="reward">KSh ${task.reward}</div>
+      <a class="btn full" href="task.html?id=${task.id}">
         Start Task →
       </a>
     </article>
@@ -133,16 +125,17 @@ function initTask() {
 
   if (instructions) {
     instructions.textContent = task.instructions;
+    instructions.style.whiteSpace = "pre-line";
   }
 
   if (target) {
     target.href = task.url;
     target.target = "_blank";
     target.rel = "noopener noreferrer";
-    target.textContent = "Search Campus Link KE on YouTube →";
+    target.textContent = "CLICK NEXT →";
   }
 
-  // Automatically start one-hour countdown.
+  // 20-minute demonstration timer
   const storageKey = `earnlink_task_${task.id}_start`;
   let startTime = Number(sessionStorage.getItem(storageKey));
 
@@ -151,7 +144,7 @@ function initTask() {
     sessionStorage.setItem(storageKey, String(startTime));
   }
 
-  const endTime = startTime + 3600000;
+  const endTime = startTime + 20 * 60 * 1000;
   let completed = false;
 
   function updateTimer() {
@@ -160,14 +153,13 @@ function initTask() {
       Math.ceil((endTime - Date.now()) / 1000)
     );
 
-    const hours = Math.floor(remaining / 3600);
-    const minutes = Math.floor((remaining % 3600) / 60);
+    const minutes = Math.floor(remaining / 60);
     const seconds = remaining % 60;
 
     if (timer) {
-      timer.textContent = [hours, minutes, seconds]
-        .map(value => String(value).padStart(2, "0"))
-        .join(":");
+      timer.textContent =
+        `${String(minutes).padStart(2, "0")}:` +
+        `${String(seconds).padStart(2, "0")}`;
     }
 
     if (remaining === 0 && !completed) {
@@ -176,13 +168,12 @@ function initTask() {
 
       if (taskMsg) {
         taskMsg.textContent =
-          "One-hour timer completed. You can now submit your research proof.";
+          "Research time completed. You can now submit your proof.";
       }
     }
   }
 
   updateTimer();
-
   const interval = setInterval(updateTimer, 1000);
 
   if (submitButton) {
@@ -190,7 +181,7 @@ function initTask() {
       if (!completed) {
         if (taskMsg) {
           taskMsg.textContent =
-            "Please wait until the one-hour timer finishes.";
+            "Please wait until the 20-minute timer finishes.";
         }
         return;
       }
