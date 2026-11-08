@@ -1,34 +1,15 @@
-<section class="upload-section">
-  <h2>UPLOAD YOUR PROOF</h2>
-
-  <p class="upload-description">
-    Submit your screen recording for task verification.
-  </p>
-
-  <label for="proof" class="upload-box">
-    <span class="upload-icon">☁</span>
-    <strong>SELECT YOUR VIDEO</strong>
-    <small>MP4, MOV or other video formats</small>
-    <span class="choose-file">CHOOSE FILE</span>
-  </label>
+<div class="upload-section">
+  <h3>UPLOAD YOUR MP4 FOR VERIFICATION</h3>
 
   <input
     type="file"
     id="proof"
-    accept="video/*"
-    hidden
+    accept="video/mp4"
   >
 
-  <div class="selected-file" id="fileName">
-    <span>🎥</span>
-    <span>No video selected</span>
-  </div>
-
-  <button id="submitTask" class="submit-proof" disabled>
-    SUBMIT PROOF →
+  <button id="submitTask" class="submit-proof">
+    NEXT →
   </button>
 
-  <p id="taskMsg" class="task-message">
-    Your submission will be marked pending review.
-  </p>
-</section>
+  <p id="taskMsg"></p>
+</div>
