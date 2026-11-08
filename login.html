@@ -1,53 +1,81 @@
-function initAuth() {
-  const loginForm = document.getElementById("loginForm");
+<!DOCTYPE html>
+<html lang="en">
 
-  if (loginForm) {
-    loginForm.addEventListener("submit", function(event) {
-      event.preventDefault();
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#050505">
+  <title>EarnLink | Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
 
-      const phone = document.getElementById("phone")?.value.trim();
-      const password = document.getElementById("password")?.value;
+<body class="auth-body">
 
-      if (!phone || !password) {
-        const msg = document.getElementById("msg");
-        if (msg) msg.textContent = "Please enter your phone number and password.";
-        return;
-      }
+  <main class="auth-card">
 
-      localStorage.setItem(
-        "earnlinkUser",
-        JSON.stringify({
-          phone: phone
-        })
-      );
+    <a class="brand auth-brand" href="login.html">
+      EARN<span>LINK</span>
+    </a>
 
-      window.location.href = "index.html";
-    });
-  }
+    <p class="eyebrow">WELCOME BACK</p>
 
-  const registerForm = document.getElementById("registerForm");
+    <h1>Login</h1>
 
-  if (registerForm) {
-    registerForm.addEventListener("submit", function(event) {
-      event.preventDefault();
+    <p class="muted">
+      Access your EarnLink account.
+    </p>
 
-      const phone = document.getElementById("phone")?.value.trim();
-      const password = document.getElementById("password")?.value;
 
-      if (!phone || !password) {
-        const msg = document.getElementById("msg");
-        if (msg) msg.textContent = "Please fill in all required fields.";
-        return;
-      }
+    <form id="loginForm">
 
-      localStorage.setItem(
-        "earnlinkUser",
-        JSON.stringify({
-          phone: phone
-        })
-      );
+      <label for="phone">
+        Phone number
+      </label>
 
-      window.location.href = "index.html";
-    });
-  }
-}
+      <input
+        id="phone"
+        type="tel"
+        placeholder="07XXXXXXXX"
+        autocomplete="tel"
+        required
+      >
+
+
+      <label for="password">
+        Password
+      </label>
+
+      <input
+        id="password"
+        type="password"
+        placeholder="Enter your password"
+        autocomplete="current-password"
+        required
+      >
+
+
+      <button
+        class="btn full"
+        type="submit"
+      >
+        Login
+      </button>
+
+
+      <p id="msg" class="msg"></p>
+
+    </form>
+
+
+    <p class="center">
+      Don't have an account?
+      <a href="signup.html">Create one</a>
+    </p>
+
+  </main>
+
+
+  <script src="script.js"></script>
+
+</body>
+</html>
