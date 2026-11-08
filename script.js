@@ -156,63 +156,57 @@ function initTask() {
     target.rel = "noopener noreferrer";
   }
 
-  // -----------------------------
-  // 20-MINUTE TIMER
-  // -----------------------------
+// -----------------------------
+// 1-SECOND TIMER
+// -----------------------------
 
-  const duration = 0.5 * 60 * 1000;
-  const timerKey = `earnlink_timer_${task.id}`;
+const duration = 1 * 1000;
+const timerKey = `earnlink_timer_${task.id}`;
 
-  let startTime = sessionStorage.getItem(timerKey);
+let startTime = sessionStorage.getItem(timerKey);
 
-  if (!startTime) {
-    startTime = Date.now();
-    sessionStorage.setItem(timerKey, startTime);
-  } else {
-    startTime = Number(startTime);
+if (!startTime) {
+  startTime = Date.now();
+  sessionStorage.setItem(timerKey, startTime);
+} else {
+  startTime = Number(startTime);
+}
+
+let timerInterval;
+
+function updateTimer() {
+  const elapsed = Date.now() - startTime;
+  const remaining = Math.max(0, duration - elapsed);
+
+  if (timer) {
+    timer.textContent = `${Math.ceil(remaining / 1000)}s`;
   }
 
-  let timerInterval;
-
-  function updateTimer() {
-    const elapsed = Date.now() - startTime;
-    const remaining = Math.max(0, duration - elapsed);
-
-    const minutes = Math.floor(remaining / 60000);
-    const seconds = Math.floor((remaining % 60000) / 1000);
+  if (remaining <= 0) {
+    clearInterval(timerInterval);
 
     if (timer) {
-      timer.textContent =
-        `${String(minutes).padStart(2, "0")}:` +
-        `${String(seconds).padStart(2, "0")}`;
+      timer.textContent = "Completed";
     }
 
-    if (remaining <= 0) {
-      clearInterval(timerInterval);
+    if (taskMsg) {
+      taskMsg.textContent =
+        "Review period completed. You can now submit your proof.";
+    }
 
-      if (timer) {
-        timer.textContent = "20:00 completed";
-      }
-
-      if (taskMsg) {
-        taskMsg.textContent =
-          "Review period completed. You can now submit your proof.";
-      }
-
-      if (submitButton) {
-        submitButton.disabled = false;
-      }
+    if (submitButton) {
+      submitButton.disabled = false;
     }
   }
+}
 
-  if (submitButton) {
-    submitButton.disabled = true;
-  }
+if (submitButton) {
+  submitButton.disabled = true;
+}
 
-  updateTimer();
+updateTimer();
 
-  timerInterval = setInterval(updateTimer, 1000);
-
+timerInterval = setInterval(updateTimer, 100);
   // -----------------------------
   // PROOF FILE SELECTION
   // -----------------------------
