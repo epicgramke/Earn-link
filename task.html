@@ -1,97 +1,34 @@
+<section class="upload-section">
+  <h2>UPLOAD YOUR PROOF</h2>
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>EarnLink | YouTube Task 1</title>
-  <link rel="stylesheet" href="style.css">
+  <p class="upload-description">
+    Submit your screen recording for task verification.
+  </p>
 
-  <style>
-    .task-detail h1 {
-      margin-bottom: 12px;
-    }
+  <label for="proof" class="upload-box">
+    <span class="upload-icon">☁</span>
+    <strong>SELECT YOUR VIDEO</strong>
+    <small>MP4, MOV or other video formats</small>
+    <span class="choose-file">CHOOSE FILE</span>
+  </label>
 
-    .task-detail .reward {
-      margin-bottom: 28px;
-    }
+  <input
+    type="file"
+    id="proof"
+    accept="video/*"
+    hidden
+  >
 
-    .timer {
-      margin-top: 28px;
-      margin-bottom: 28px;
-    }
+  <div class="selected-file" id="fileName">
+    <span>🎥</span>
+    <span>No video selected</span>
+  </div>
 
-    .task-instructions {
-      margin-top: 24px;
-      margin-bottom: 25px;
-      line-height: 1.8;
-    }
+  <button id="submitTask" class="submit-proof" disabled>
+    SUBMIT PROOF →
+  </button>
 
-    .task-detail .record {
-      margin-top: 30px;
-    }
-  </style>
-</head>
-
-<body>
-
-  <header class="topbar">
-    <a class="brand" href="index.html">EARN<span>LINK</span></a>
-  </header>
-
-  <main class="container narrow">
-
-    <div class="panel task-detail">
-
-      <p class="eyebrow">YOUTUBE TASK</p>
-
-      <h1 id="taskName">YOUTUBE 1</h1>
-
-      <div class="reward">
-        Reward: <b id="reward">KSh 10</b>
-      </div>
-
-      <div class="timer" id="timer">01:00:00</div>
-
-      <p id="instructions" class="task-instructions">
-        Search for Campus Link KE on YouTube. Review the channel,
-        examine its videos and prepare a short research report.
-      </p>
-
-<a id="target" class="btn">
-  NEXT
-</a>
-
-     <div class="record">
-        <h2>Upload Task Proof</h2>
-
-        <p>
-          Upload your research report or screenshots for review.
-        </p>
-
-        <input
-          id="proof"
-          type="file"
-          accept="image/*,.pdf,video/*">
-
-        <button class="btn full" id="submitTask">
-          Submit for Verification
-        </button>
-
-        <p id="taskMsg" class="msg"></p>
-      </div>
-
-    </div>
-
-  </main>
-
-  <nav class="bottom-navigation">
-    <a href="index.html">Home</a>
-    <a href="tasks.html" class="active">Tasks</a>
-    <a href="wallet.html">Wallet</a>
-  </nav>
-
-  <script src="script.js"></script>
-
-</body>
-</html>
+  <p id="taskMsg" class="task-message">
+    Your submission will be marked pending review.
+  </p>
+</section>
