@@ -1,1 +1,53 @@
-<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>EarnLink | Login</title><link rel="stylesheet" href="style.css"></head><body class="auth-body"><div class="auth-card"><a class="brand" href="index.html">EARN<span>LINK</span></a><p class="eyebrow">WELCOME BACK</p><h1>Login</h1><p class="muted">Access your EarnLink account.</p><form id="loginForm"><input id="phone" type="tel" placeholder="Phone number" required><input id="password" type="password" placeholder="Password" required><button class="btn full" type="submit">Login</button><p id="msg" class="msg"></p></form><p class="center">Don't have an account? <a href="signup.html">Create one</a></p></div><script src="script.js"></script></body></html>
+function initAuth() {
+  const loginForm = document.getElementById("loginForm");
+
+  if (loginForm) {
+    loginForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const phone = document.getElementById("phone")?.value.trim();
+      const password = document.getElementById("password")?.value;
+
+      if (!phone || !password) {
+        const msg = document.getElementById("msg");
+        if (msg) msg.textContent = "Please enter your phone number and password.";
+        return;
+      }
+
+      localStorage.setItem(
+        "earnlinkUser",
+        JSON.stringify({
+          phone: phone
+        })
+      );
+
+      window.location.href = "index.html";
+    });
+  }
+
+  const registerForm = document.getElementById("registerForm");
+
+  if (registerForm) {
+    registerForm.addEventListener("submit", function(event) {
+      event.preventDefault();
+
+      const phone = document.getElementById("phone")?.value.trim();
+      const password = document.getElementById("password")?.value;
+
+      if (!phone || !password) {
+        const msg = document.getElementById("msg");
+        if (msg) msg.textContent = "Please fill in all required fields.";
+        return;
+      }
+
+      localStorage.setItem(
+        "earnlinkUser",
+        JSON.stringify({
+          phone: phone
+        })
+      );
+
+      window.location.href = "index.html";
+    });
+  }
+}
